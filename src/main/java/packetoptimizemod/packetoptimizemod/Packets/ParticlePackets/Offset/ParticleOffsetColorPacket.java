@@ -19,16 +19,19 @@ public class ParticleOffsetColorPacket extends ParticleColorPacket {
     protected List<Float> offx = new ArrayList<>();
     protected List<Float> offy = new ArrayList<>();
     protected List<Float> offz = new ArrayList<>();
+    protected int count;
 
-    public ParticleOffsetColorPacket(int type, float r, float g, float b, float scale) {
+    public ParticleOffsetColorPacket(int type, int count, float r, float g, float b, float scale) {
         super(type, r, b, g, scale);
+        this.count = count;
     }
 
-    public ParticleOffsetColorPacket(int type, float r, float g, float b, float scale, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
+    public ParticleOffsetColorPacket(int type, int count, float r, float g, float b, float scale, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
         super(type, r, g, b, scale, x, y, z);
         this.offx = offx;
         this.offy = offy;
         this.offz = offz;
+        this.count = count;
     }
 
     public boolean isSimilar(float r, float g, float b, float scale) {
@@ -38,6 +41,7 @@ public class ParticleOffsetColorPacket extends ParticleColorPacket {
     public static void encode(ParticleOffsetColorPacket packet, PacketBuffer buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.type);
+        buffer.writeInt(packet.count);
         buffer.writeFloat(packet.r);
         buffer.writeFloat(packet.g);
         buffer.writeFloat(packet.b);
@@ -55,6 +59,7 @@ public class ParticleOffsetColorPacket extends ParticleColorPacket {
 
     public static ParticleOffsetColorPacket decode(PacketBuffer buffer) {
         int type = buffer.readInt();
+        int count = buffer.readInt();
         float r = buffer.readFloat();
         float g = buffer.readFloat();
         float b = buffer.readFloat();
@@ -74,7 +79,7 @@ public class ParticleOffsetColorPacket extends ParticleColorPacket {
             offy.add(buffer.readFloat());
             offz.add(buffer.readFloat());
         }
-        return new ParticleOffsetColorPacket(type, r, g, b, scale, x, y, z, offx, offy, offz);
+        return new ParticleOffsetColorPacket(type, count, r, g, b, scale, x, y, z, offx, offy, offz);
     }
 
     public static void onMessageReceived(ParticleOffsetColorPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
@@ -89,14 +94,16 @@ public class ParticleOffsetColorPacket extends ParticleColorPacket {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
-            if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
-                double x = packet.x.get(i) - packet.offx.get(i) + random.nextDouble() * packet.offx.get(i) * 2;
-                double y = packet.y.get(i) - packet.offy.get(i) + random.nextDouble() * packet.offy.get(i) * 2;
-                double z = packet.z.get(i) - packet.offz.get(i) + random.nextDouble() * packet.offz.get(i) * 2;
+            for (int n = 0; n < packet.count; n++) {
+                if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
+                    double x = packet.x.get(i) + (-packet.offx.get(i) + random.nextDouble() * packet.offx.get(i) * 2) * 2;
+                    double y = packet.y.get(i) + (-packet.offy.get(i) + random.nextDouble() * packet.offy.get(i) * 2) * 2;
+                    double z = packet.z.get(i) + (-packet.offz.get(i) + random.nextDouble() * packet.offz.get(i) * 2) * 2;
 
-                world.addParticle(
-                        new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),
-                        x, y, z, 0, 0, 0);
+                    world.addParticle(
+                            new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),
+                            x, y, z, 0, 0, 0);
+                }
             }
         }
     }

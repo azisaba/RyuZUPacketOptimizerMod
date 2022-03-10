@@ -1,5 +1,6 @@
 package packetoptimizemod.packetoptimizemod;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -28,33 +29,5 @@ public class SendUsingModPacket {
     }
 
     private static void processMessage(SendUsingModPacket packet) {
-    }
-
-    @SubscribeEvent
-    public static void sendUsingModPacket(AttackEntityEvent e) {
-        //if (e.getWorld().getServer() == null) return;
-        //if (!e.getWorld().getServer().getServerHostname().equals("azisaba.net") || !e.getWorld().getServer().getServerHostname().equals("localhost")) return;
-        ParticleChannnel.sendPacket(new SendUsingModPacket());
-    }
-
-    @SubscribeEvent
-    public static void sendUsingModPacket(EntityJoinWorldEvent e) {
-        //if (e.getWorld().getServer() == null) return;
-        //if (!e.getWorld().getServer().getServerHostname().equals("azisaba.net") || !e.getWorld().getServer().getServerHostname().equals("localhost")) return;
-        ParticleChannnel.sendPacket(new SendUsingModPacket());
-    }
-
-    @SubscribeEvent
-    public static void sendUsingModPacket(PlayerEvent.Clone e) {
-        //if (e.getWorld().getServer() == null) return;
-        //if (!e.getWorld().getServer().getServerHostname().equals("azisaba.net") || !e.getWorld().getServer().getServerHostname().equals("localhost")) return;
-        ParticleChannnel.sendPacket(new SendUsingModPacket());
-    }
-
-    @SubscribeEvent
-    public static void sendUsingModPacket(PlayerEvent.PlayerLoggedInEvent e) {
-        //if (e.getWorld().getServer() == null) return;
-        //if (!e.getWorld().getServer().getServerHostname().equals("azisaba.net") || !e.getWorld().getServer().getServerHostname().equals("localhost")) return;
-        ParticleChannnel.sendPacket(new SendUsingModPacket());
     }
 }

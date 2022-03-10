@@ -93,6 +93,10 @@ public class ParticleChannnel {
         INSTANCE.registerMessage(ParticleCompressionPacket.ID , ParticleCompressionPacket.class , ParticleCompressionPacket::encode ,
                 ParticleCompressionPacket::decode , ParticleCompressionPacket::onMessageReceived ,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        INSTANCE.registerMessage(CheckUsingModPacket.ID , CheckUsingModPacket.class , CheckUsingModPacket::encode ,
+                CheckUsingModPacket::decode , CheckUsingModPacket::onMessageReceived ,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static <T> void sendPacket(T packet) {
