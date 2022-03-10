@@ -43,5 +43,6 @@ public class SetParticleDrawingRatePacket {
 
     private static void processMessage(SetParticleDrawingRatePacket packet) {
         SettingScreen.drawingRate = packet.value;
+        SettingScreen.write();
     }
 }

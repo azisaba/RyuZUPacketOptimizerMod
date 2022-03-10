@@ -1,6 +1,7 @@
 package packetoptimizemod.packetoptimizemod.GUI;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -12,7 +13,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.core.config.yaml.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = PacketOptimizeMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SettingScreen extends Screen {
@@ -51,8 +59,62 @@ public class SettingScreen extends Screen {
         );
     }
 
+    @Override
+    public void onClose() {
+        write();
+    }
+
     public static void initialize() {
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY,
                 () -> (mc, screen) -> new SettingScreen());
+    }
+
+    public static void read() {
+        File file = new File(Minecraft.getInstance().gameDir, "config/RyuZUPacketOptimizer.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Yaml yaml = new Yaml();
+        Map<String, Object> yamlMap;
+        try {
+            yamlMap = yaml.loadAs(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8), Map.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (yamlMap == null) yamlMap = new HashMap<>();
+        drawingRate = (double) yamlMap.getOrDefault("ParticleDrawingRate", 100.0);
+    }
+
+    public static void write() {
+        File file = new File(Minecraft.getInstance().gameDir, "config/RyuZUPacketOptimizer.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Yaml yaml = new Yaml();
+        Map<String, Object> yamlMap;
+        try {
+            yamlMap = yaml.loadAs(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8), Map.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (yamlMap == null) yamlMap = new HashMap<>();
+        yamlMap.put("ParticleDrawingRate", drawingRate);
+        try {
+            yaml.dump(yamlMap , new OutputStreamWriter(new FileOutputStream(file) , StandardCharsets.UTF_8));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
