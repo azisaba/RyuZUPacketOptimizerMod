@@ -106,13 +106,13 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
                     double x = packet.x.get(i) + random.nextGaussian() * packet.offx.get(i);
                     double y = packet.y.get(i) + random.nextGaussian() * packet.offy.get(i);
                     double z = packet.z.get(i) + random.nextGaussian() * packet.offz.get(i);
-                    double offx = -packet.speed + random.nextGaussian() * packet.speed;
-                    double offy = -packet.speed + random.nextGaussian() * packet.speed;
-                    double offz = -packet.speed + random.nextGaussian() * packet.speed;
+                    double offx = random.nextGaussian() * packet.speed;
+                    double offy = random.nextGaussian() * packet.speed;
+                    double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
                             particle, true,
-                            x, y, z, offx * 2, offy * 2, offz * 2);
+                            x, y, z, offx, offy, offz);
                 }
             }
         }

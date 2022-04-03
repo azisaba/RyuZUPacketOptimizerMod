@@ -98,13 +98,13 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
                     double x = packet.x.get(i) + random.nextGaussian() * packet.offx.get(i);
                     double y = packet.y.get(i) + random.nextGaussian() * packet.offy.get(i);
                     double z = packet.z.get(i) + random.nextGaussian() * packet.offz.get(i);
-                    double offx = -packet.speed + ParticleBasePacket.random.nextDouble() * packet.speed * 2;
-                    double offy = -packet.speed + ParticleBasePacket.random.nextDouble() * packet.speed * 2;
-                    double offz = -packet.speed + ParticleBasePacket.random.nextDouble() * packet.speed * 2;
+                    double offx = random.nextGaussian() * packet.speed;
+                    double offy = random.nextGaussian() * packet.speed;
+                    double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
                             new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()), true,
-                            x, y, z, offx * 2, offy * 2, offz * 2);
+                            x, y, z, offx, offy, offz);
                 }
             }
         }

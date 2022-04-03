@@ -95,12 +95,12 @@ public class ParticleChannnel {
                 ParticleCompressionPacket::decode , ParticleCompressionPacket::onMessageReceived ,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
-        INSTANCE.registerMessage(ParticleOriginalColorPacket.ID , ParticleOriginalColorPacket.class , ParticleOriginalColorPacket::encode ,
-                ParticleOriginalColorPacket::decode , ParticleOriginalColorPacket::onMessageReceived ,
-                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
         INSTANCE.registerMessage(CheckUsingModPacket.ID , CheckUsingModPacket.class , CheckUsingModPacket::encode ,
                 CheckUsingModPacket::decode , CheckUsingModPacket::onMessageReceived ,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        INSTANCE.registerMessage(ParticleOriginalColorPacket.ID , ParticleOriginalColorPacket.class , ParticleOriginalColorPacket::encode ,
+                ParticleOriginalColorPacket::decode , ParticleOriginalColorPacket::onMessageReceived ,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 

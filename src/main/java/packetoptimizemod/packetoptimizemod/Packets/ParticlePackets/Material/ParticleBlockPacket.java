@@ -88,14 +88,14 @@ public class ParticleBlockPacket extends ParticleCountPacket {
                 double x = packet.x.get(i);
                 double y = packet.y.get(i);
                 double z = packet.z.get(i);
-                double offx = -packet.speed + random.nextDouble() * packet.speed * 2;
-                double offy = -packet.speed + random.nextDouble() * packet.speed * 2;
-                double offz = -packet.speed + random.nextDouble() * packet.speed * 2;
+                double offx = random.nextGaussian() * packet.speed;
+                double offy = random.nextGaussian() * packet.speed;
+                double offz = random.nextGaussian() * packet.speed;
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     world.addParticle(
                             block, true,
-                            x, y, z, offx * 2, offy * 2, offz * 2);
+                            x, y, z, offx, offy, offz);
                 }
             }
         }

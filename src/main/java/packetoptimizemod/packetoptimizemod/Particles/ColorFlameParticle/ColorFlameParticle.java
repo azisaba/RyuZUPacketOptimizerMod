@@ -1,6 +1,7 @@
 package packetoptimizemod.packetoptimizemod.Particles.ColorFlameParticle;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.particle.DeceleratingParticle;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
@@ -8,7 +9,7 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 
-public class ColorFlameParticle extends SpriteTexturedParticle {
+public class ColorFlameParticle extends DeceleratingParticle {
     private final IAnimatedSprite spriteWithAge;
 
     public ColorFlameParticle(
@@ -19,9 +20,6 @@ public class ColorFlameParticle extends SpriteTexturedParticle {
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
         this.spriteWithAge = spriteWithAge;
-        this.motionX = motionX;
-        this.motionY = motionY;
-        this.motionZ = motionZ;
         float f = (float) Math.random() * 0.4F + 0.6F;
         this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
@@ -44,12 +42,6 @@ public class ColorFlameParticle extends SpriteTexturedParticle {
     public void move(double x, double y, double z) {
         this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
         this.resetPositionToBB();
-    }
-
-    @Override
-    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
-        this.setAlphaF(0.6F - ((float)this.age + partialTicks - 1.0F) * 0.25F * 0.5F);
-        super.renderParticle(buffer, renderInfo, partialTicks);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.particle.TexturedParticle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +28,6 @@ public class ColorFlashParticle extends SpriteTexturedParticle {
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
         this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
         this.particleScale *= 0.75F * particleData.getAlpha();
-        int i = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.maxAge = 4;
         this.selectSpriteWithAge(spriteWithAge);
     }

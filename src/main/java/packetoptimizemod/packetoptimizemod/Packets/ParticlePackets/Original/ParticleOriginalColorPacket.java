@@ -116,12 +116,12 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             if (packet.count == 0) {
-                double x = packet.x.get(i) + random.nextGaussian() * packet.offx.get(i);
-                double y = packet.y.get(i) + random.nextGaussian() * packet.offy.get(i);
-                double z = packet.z.get(i) + random.nextGaussian() * packet.offz.get(i);
-                double offx = -packet.speed + random.nextGaussian() * packet.speed;
-                double offy = -packet.speed + random.nextGaussian() * packet.speed;
-                double offz = -packet.speed + random.nextGaussian() * packet.speed;
+                double x = packet.x.get(i);
+                double y = packet.y.get(i);
+                double z = packet.z.get(i);
+                double offx = packet.offx.get(i) * packet.speed;
+                double offy = packet.offy.get(i) * packet.speed;
+                double offz = packet.offz.get(i) * packet.speed;
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     switch (packet.type) {
@@ -142,17 +142,20 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
                     double x = packet.x.get(i) + random.nextGaussian() * packet.offx.get(i);
                     double y = packet.y.get(i) + random.nextGaussian() * packet.offy.get(i);
                     double z = packet.z.get(i) + random.nextGaussian() * packet.offz.get(i);
+                    double offx = random.nextGaussian() * packet.speed;
+                    double offy = random.nextGaussian() * packet.speed;
+                    double offz = random.nextGaussian() * packet.speed;
 
                     if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                         switch (packet.type) {
                             case 0:
-                                world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, 0,0,0);
+                                world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
                                 break;
                             case 1:
-                                world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z,0,0,0);
+                                world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z,offx, offy, offz);
                                 break;
                             case 2:
-                                world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, 0,0,0);
+                                world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
                                 break;
                         }
 

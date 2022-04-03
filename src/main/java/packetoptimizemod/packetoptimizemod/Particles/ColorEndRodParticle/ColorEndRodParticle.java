@@ -27,10 +27,11 @@ public class ColorEndRodParticle extends SimpleAnimatedParticle {
         this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
         this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
+        String hex = Integer.toHexString(Math.round(particleRed * 255)) + Integer.toHexString(Math.round(particleGreen * 255)) + Integer.toHexString(Math.round(particleBlue * 255));
         int i = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
         this.maxAge = 60 + this.rand.nextInt(12);
         this.particleScale *= 0.75F;
-        this.setColorFade(15916745);
+        this.setColorFade(Integer.parseInt(hex, 16));
         this.selectSpriteWithAge(spriteWithAge);
     }
 
