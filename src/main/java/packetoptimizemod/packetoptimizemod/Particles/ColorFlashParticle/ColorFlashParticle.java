@@ -47,29 +47,4 @@ public class ColorFlashParticle extends SpriteTexturedParticle {
     public float getScale(float scaleFactor) {
         return 7.1F * MathHelper.sin(((float)this.age + scaleFactor - 1.0F) * 0.25F * (float)Math.PI);
     }
-
-    /*@Override
-    public void tick() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        if (this.age++ >= this.maxAge) {
-            this.setExpired();
-        } else {
-            this.selectSpriteWithAge(this.spriteWithAge);
-            this.move(this.motionX, this.motionY, this.motionZ);
-            if (this.posY == this.prevPosY) {
-                this.motionX *= 1.1D;
-                this.motionZ *= 1.1D;
-            }
-
-            this.motionX *= (double) 0.96F;
-            this.motionY *= (double) 0.96F;
-            this.motionZ *= (double) 0.96F;
-            if (this.onGround) {
-                this.motionX *= (double) 0.7F;
-                this.motionZ *= (double) 0.7F;
-            }
-        }
-    }*/
 }
