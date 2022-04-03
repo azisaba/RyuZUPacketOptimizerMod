@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ItemParticleData;
@@ -22,19 +23,22 @@ public class ParticleItemPacket extends ParticleCountPacket {
     public static final byte ID = 9;
 
     protected final int itemid;
+    protected final int data;
 
-    public ParticleItemPacket(int type, int count, float speed, int itemid) {
+    public ParticleItemPacket(int type, int count, float speed, int itemid,int data) {
         super(type, count, speed);
         this.itemid = itemid;
+        this.data = data;
     }
 
-    public ParticleItemPacket(int type, int count, float speed, int itemid, List<Double> x, List<Double> y, List<Double> z) {
+    public ParticleItemPacket(int type, int count, float speed, int itemid,int data, List<Double> x, List<Double> y, List<Double> z) {
         super(type, count, speed, x, y, z);
         this.itemid = itemid;
+        this.data = data;
     }
 
     public boolean isSimilar(int type, int count, float speed, int itemid) {
-        return this.type == type && this.count == count && this.speed == speed && this.itemid == itemid;
+        return this.type == type && this.count == count && this.speed == speed && this.itemid == itemid && this.data == data;
     }
 
     public static void encode(ParticleItemPacket packet, PacketBuffer buffer) {
@@ -42,6 +46,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.itemid);
+        buffer.writeInt(packet.data);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
             buffer.writeDouble(packet.x.get(i));
@@ -55,6 +60,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
         int count = buffer.readInt();
         float speed = buffer.readFloat();
         int blockid = buffer.readInt();
+        int data = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
@@ -64,7 +70,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
             y.add(buffer.readDouble());
             z.add(buffer.readDouble());
         }
-        return new ParticleItemPacket(type, count, speed, blockid, x, y, z);
+        return new ParticleItemPacket(type, count, speed, blockid,data, x, y, z);
     }
 
     public static void onMessageReceived(ParticleItemPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
@@ -80,7 +86,12 @@ public class ParticleItemPacket extends ParticleCountPacket {
         ClientWorld world = Minecraft.getInstance().world;
         int count = packet.count == 810 ? 1 : packet.count;
         if (world == null) return;
-        ItemParticleData item = new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid)));
+        ItemStack item = new ItemStack(Item.getItemById(packet.itemid));
+        CompoundNBT nbt = item.getTag();
+        if(nbt == null) nbt = new CompoundNBT();
+        nbt.putInt("CustomModelData" , packet.data);
+        item.setTag(nbt);
+        ItemParticleData particle = new ItemParticleData(ParticleTypes.ITEM, item);
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < count; n++) {
                 double x = packet.x.get(i);
@@ -92,7 +103,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate || packet.count == 810) {
                     world.addParticle(
-                            item,true,
+                            particle,true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

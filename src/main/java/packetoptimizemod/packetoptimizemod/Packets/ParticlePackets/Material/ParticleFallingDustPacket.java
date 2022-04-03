@@ -1,11 +1,15 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -20,19 +24,22 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
     public static final byte ID = 8;
 
     protected final int blockid;
+    protected final int data;
 
-    public ParticleFallingDustPacket(int type, int count, float speed, int blockid) {
+    public ParticleFallingDustPacket(int type, int count, float speed, int blockid, int data) {
         super(type, count, speed);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public ParticleFallingDustPacket(int type, int count, float speed, int blockid, List<Double> x, List<Double> y, List<Double> z) {
+    public ParticleFallingDustPacket(int type, int count, float speed, int blockid,int data, List<Double> x, List<Double> y, List<Double> z) {
         super(type, count, speed, x, y, z);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public boolean isSimilar(int type, int count, float speed, int blockid) {
-        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid;
+    public boolean isSimilar(int type, int count, float speed, int blockid,int data) {
+        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
     public static void encode(ParticleFallingDustPacket packet, PacketBuffer buffer) {
@@ -40,6 +47,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.blockid);
+        buffer.writeInt(packet.data);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
             buffer.writeDouble(packet.x.get(i));
@@ -53,6 +61,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
         int count = buffer.readInt();
         float speed = buffer.readFloat();
         int blockid = buffer.readInt();
+        int data = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
@@ -62,7 +71,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
             y.add(buffer.readDouble());
             z.add(buffer.readDouble());
         }
-        return new ParticleFallingDustPacket(type, count, speed, blockid, x, y, z);
+        return new ParticleFallingDustPacket(type, count, speed, blockid,data, x, y, z);
     }
 
     public static void onMessageReceived(ParticleFallingDustPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {

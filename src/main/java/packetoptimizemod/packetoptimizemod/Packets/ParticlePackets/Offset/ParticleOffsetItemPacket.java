@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -20,19 +21,22 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
     public static final byte ID = 11;
 
     protected final int itemid;
+    protected final int data;
 
-    public ParticleOffsetItemPacket(int type, int count, float speed, int itemid) {
+    public ParticleOffsetItemPacket(int type, int count, float speed, int itemid, int data) {
         super(type, count, speed);
         this.itemid = itemid;
+        this.data = data;
     }
 
-    public ParticleOffsetItemPacket(int type, int count, float speed, int itemid, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
+    public ParticleOffsetItemPacket(int type, int count, float speed, int itemid, int data, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
         super(type, count, speed, x, y, z, offx, offy, offz);
         this.itemid = itemid;
+        this.data = data;
     }
 
-    public boolean isSimilar(int type, int count, float speed, int itemid) {
-        return this.type == type && this.count == count && this.speed == speed && this.itemid == itemid;
+    public boolean isSimilar(int type, int count, float speed, int itemid, int data) {
+        return this.type == type && this.count == count && this.speed == speed && this.itemid == itemid && this.data == data;
     }
 
     public static void encode(ParticleOffsetItemPacket packet, PacketBuffer buffer) {
@@ -41,6 +45,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.itemid);
+        buffer.writeInt(packet.data);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
             buffer.writeDouble(packet.x.get(i));
@@ -57,6 +62,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
         int count = buffer.readInt();
         float speed = buffer.readFloat();
         int blockid = buffer.readInt();
+        int data = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
@@ -72,7 +78,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
             offy.add(buffer.readFloat());
             offz.add(buffer.readFloat());
         }
-        return new ParticleOffsetItemPacket(type, count, speed, blockid, x, y, z, offx, offy, offz);
+        return new ParticleOffsetItemPacket(type, count, speed, blockid, data, x, y, z, offx, offy, offz);
     }
 
 
@@ -87,6 +93,12 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
     public static void processMessage(ParticleOffsetItemPacket packet) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) return;
+        ItemStack item = new ItemStack(Item.getItemById(packet.itemid));
+        CompoundNBT nbt = item.getTag();
+        if(nbt == null) nbt = new CompoundNBT();
+        nbt.putInt("CustomModelData" , packet.data);
+        item.setTag(nbt);
+        ItemParticleData particle = new ItemParticleData(ParticleTypes.ITEM, item);
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < count; n++) {
@@ -99,7 +111,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
                     double offz = -packet.speed + random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid))),true,
+                            particle, true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

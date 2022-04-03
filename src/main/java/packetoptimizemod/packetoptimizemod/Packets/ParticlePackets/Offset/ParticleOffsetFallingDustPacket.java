@@ -20,19 +20,22 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
     public static final byte ID = 12;
 
     protected final int blockid;
+    protected final int data;
 
-    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int blockid) {
+    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int data, int blockid) {
         super(type, count, speed);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int blockid, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
+    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int data, int blockid, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
         super(type, count, speed, x, y, z, offx, offy, offz);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public boolean isSimilar(int type, int count, float speed, int blockid) {
-        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid;
+    public boolean isSimilar(int type, int count, float speed, int blockid, int data) {
+        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
     public static void encode(ParticleOffsetFallingDustPacket packet, PacketBuffer buffer) {
@@ -41,6 +44,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.blockid);
+        buffer.writeInt(packet.data);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
             buffer.writeDouble(packet.x.get(i));
@@ -57,6 +61,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
         int count = buffer.readInt();
         float speed = buffer.readFloat();
         int blockid = buffer.readInt();
+        int data = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
@@ -72,7 +77,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
             offy.add(buffer.readFloat());
             offz.add(buffer.readFloat());
         }
-        return new ParticleOffsetFallingDustPacket(type, count, speed, blockid, x, y, z, offx, offy, offz);
+        return new ParticleOffsetFallingDustPacket(type, count, speed, blockid, data, x, y, z, offx, offy, offz);
     }
 
     public static void onMessageReceived(ParticleOffsetFallingDustPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
@@ -98,7 +103,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
                     double offz = -packet.speed + ParticleBasePacket.random.nextDouble() * packet.speed * 2;
 
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()),true,
+                            new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()), true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

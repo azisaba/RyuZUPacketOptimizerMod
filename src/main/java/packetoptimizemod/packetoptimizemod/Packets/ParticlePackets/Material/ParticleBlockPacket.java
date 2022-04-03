@@ -20,19 +20,22 @@ public class ParticleBlockPacket extends ParticleCountPacket {
     public static final byte ID = 2;
 
     protected final int blockid;
+    protected final int data;
 
-    public ParticleBlockPacket(int type, int count, float speed, int blockid) {
+    public ParticleBlockPacket(int type, int count, float speed, int blockid, int data) {
         super(type, count, speed);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public ParticleBlockPacket(int type, int count, float speed, int blockid, List<Double> x, List<Double> y, List<Double> z) {
+    public ParticleBlockPacket(int type, int count, float speed, int blockid, int data, List<Double> x, List<Double> y, List<Double> z) {
         super(type, count, speed, x, y, z);
         this.blockid = blockid;
+        this.data = data;
     }
 
-    public boolean isSimilar(int type, int count, float speed, int blockid) {
-        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid;
+    public boolean isSimilar(int type, int count, float speed, int blockid, int data) {
+        return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
     public static void encode(ParticleBlockPacket packet, PacketBuffer buffer) {
@@ -40,6 +43,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.blockid);
+        buffer.writeInt(packet.data);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
             buffer.writeDouble(packet.x.get(i));
@@ -53,6 +57,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
         int count = buffer.readInt();
         float speed = buffer.readFloat();
         int blockid = buffer.readInt();
+        int data = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
@@ -62,7 +67,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
             y.add(buffer.readDouble());
             z.add(buffer.readDouble());
         }
-        return new ParticleBlockPacket(type, count, speed, blockid, x, y, z);
+        return new ParticleBlockPacket(type, count, speed, blockid,data, x, y, z);
     }
 
     public static void onMessageReceived(ParticleBlockPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
@@ -76,10 +81,10 @@ public class ParticleBlockPacket extends ParticleCountPacket {
     public static void processMessage(ParticleBlockPacket packet) {
 
         ClientWorld world = Minecraft.getInstance().world;
-        if(world == null) return;
-        BlockParticleData block = new BlockParticleData(ParticleTypes.BLOCK , Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState());
+        if (world == null) return;
+        BlockParticleData block = new BlockParticleData(ParticleTypes.BLOCK, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState());
         for (int i = 0; i < packet.x.size(); i++) {
-            for(int n = 0 ; n < packet.count ; n++) {
+            for (int n = 0; n < packet.count; n++) {
                 double x = packet.x.get(i);
                 double y = packet.y.get(i);
                 double z = packet.z.get(i);
@@ -87,9 +92,9 @@ public class ParticleBlockPacket extends ParticleCountPacket {
                 double offy = -packet.speed + random.nextDouble() * packet.speed * 2;
                 double offz = -packet.speed + random.nextDouble() * packet.speed * 2;
 
-                if(SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
+                if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     world.addParticle(
-                            block,true,
+                            block, true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

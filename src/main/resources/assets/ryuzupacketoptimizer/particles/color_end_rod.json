@@ -1,5 +1,13 @@
 {
 	"textures": [
-		"ryuzupacketoptimizer:color_end_rod"
+		"ryuzupacketoptimizer:color_end_rod_0",
+		"ryuzupacketoptimizer:color_end_rod_1",
+		"ryuzupacketoptimizer:color_end_rod_2",
+		"ryuzupacketoptimizer:color_end_rod_3",
+		"ryuzupacketoptimizer:color_end_rod_4",
+		"ryuzupacketoptimizer:color_end_rod_5",
+		"ryuzupacketoptimizer:color_end_rod_6",
+		"ryuzupacketoptimizer:color_end_rod_7"
+
 	]
 }
