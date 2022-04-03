@@ -89,15 +89,15 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < count; n++) {
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate || packet.count == 810) {
-                    double x = packet.x.get(i) + (-packet.offx.get(i) + random.nextDouble() * packet.offx.get(i) * 2) * 2;
-                    double y = packet.y.get(i) + (-packet.offy.get(i) + random.nextDouble() * packet.offy.get(i) * 2) * 2;
-                    double z = packet.z.get(i) + (-packet.offz.get(i) + random.nextDouble() * packet.offz.get(i) * 2) * 2;
-                    double offx = -packet.speed + random.nextDouble() * packet.speed * 2;
-                    double offy = -packet.speed + random.nextDouble() * packet.speed * 2;
-                    double offz = -packet.speed + random.nextDouble() * packet.speed * 2;
+                    double x = packet.x.get(i) + random.nextGaussian() * packet.offx.get(i);
+                    double y = packet.y.get(i) + random.nextGaussian() * packet.offy.get(i);
+                    double z = packet.z.get(i) + random.nextGaussian() * packet.offz.get(i);
+                    double offx = -packet.speed + random.nextGaussian() * packet.speed;
+                    double offy = -packet.speed + random.nextGaussian() * packet.speed;
+                    double offz = -packet.speed + random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.BLOCK, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()),
+                            new BlockParticleData(ParticleTypes.BLOCK, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()),true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

@@ -1,10 +1,12 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.fml.LogicalSide;
@@ -78,6 +80,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
         ClientWorld world = Minecraft.getInstance().world;
         int count = packet.count == 810 ? 1 : packet.count;
         if (world == null) return;
+        ItemParticleData item = new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid)));
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < count; n++) {
                 double x = packet.x.get(i);
@@ -89,7 +92,7 @@ public class ParticleItemPacket extends ParticleCountPacket {
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate || packet.count == 810) {
                     world.addParticle(
-                            new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid))),
+                            item,true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

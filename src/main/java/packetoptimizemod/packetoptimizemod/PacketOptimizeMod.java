@@ -2,9 +2,6 @@ package packetoptimizemod.packetoptimizemod;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,16 +12,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle.ColorFlameParticleSetup;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -44,6 +37,8 @@ public class PacketOptimizeMod {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        FMLJavaModLoadingContext.get().getModEventBus().register(ColorFlameParticleSetup.class);
 
         // Register ourselves for server and other game events we are interested in
         LOGGER.info("msg");

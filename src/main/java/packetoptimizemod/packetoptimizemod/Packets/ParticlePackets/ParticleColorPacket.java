@@ -7,6 +7,7 @@ import net.minecraft.particles.RedstoneParticleData;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.Particles.ColorFlameParticle.ColorFlameParticleData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,15 +85,21 @@ public class ParticleColorPacket extends ParticleBasePacket {
     public static void processMessage(ParticleColorPacket packet) {
 
         ClientWorld world = Minecraft.getInstance().world;
-        if(world == null) return;
+        if (world == null) return;
+        RedstoneParticleData dust = new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale);
+        ColorFlameParticleData flash = new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale);
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);
             double y = packet.y.get(i);
             double z = packet.z.get(i);
 
-            if(SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
+            if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
+                /*world.addParticle(
+                        dust, true,
+                        x, y, z, 0, 0, 0);*/
+
                 world.addParticle(
-                        new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),
+                        flash,
                         x, y, z, 0, 0, 0);
             }
         }

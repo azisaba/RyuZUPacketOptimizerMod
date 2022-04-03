@@ -76,6 +76,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
     public static void processMessage(ParticleFallingDustPacket packet) {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) return;
+        BlockParticleData falling_dust = new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState());
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < packet.count; n++) {
                 double x = packet.x.get(i);
@@ -87,7 +88,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()),
+                            falling_dust,true,
                             x, y, z, offx, offy, offz);
                 }
             }

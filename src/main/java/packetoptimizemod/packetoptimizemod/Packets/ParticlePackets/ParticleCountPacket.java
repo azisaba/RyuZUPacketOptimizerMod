@@ -84,7 +84,7 @@ public class ParticleCountPacket extends ParticleBasePacket {
                     double offy = -packet.speed + random.nextDouble() * packet.speed * 2;
                     double offz = -packet.speed + random.nextDouble() * packet.speed * 2;
 
-                    world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),
+                    world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

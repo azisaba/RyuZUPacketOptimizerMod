@@ -60,7 +60,7 @@ public class ParticleForceColorPacket extends ParticleColorPacket {
             double z = packet.z.get(i);
 
             world.addParticle(
-                    new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),
+                    new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),true,
                     x, y, z, 0, 0, 0);
         }
     }

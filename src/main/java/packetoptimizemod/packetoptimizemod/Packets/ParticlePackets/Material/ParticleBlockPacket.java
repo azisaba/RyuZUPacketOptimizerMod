@@ -77,6 +77,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
 
         ClientWorld world = Minecraft.getInstance().world;
         if(world == null) return;
+        BlockParticleData block = new BlockParticleData(ParticleTypes.BLOCK , Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState());
         for (int i = 0; i < packet.x.size(); i++) {
             for(int n = 0 ; n < packet.count ; n++) {
                 double x = packet.x.get(i);
@@ -88,7 +89,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
 
                 if(SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.BLOCK , Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()),
+                            block,true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }

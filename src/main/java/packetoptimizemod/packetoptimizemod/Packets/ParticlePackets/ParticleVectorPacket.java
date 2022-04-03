@@ -96,7 +96,7 @@ public class ParticleVectorPacket extends ParticleBasePacket {
             double offz = packet.offz.get(i) * packet.speed;
 
             if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
-                world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),
+                world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),true,
                         x, y, z, offx, offy, offz);
             }
         }

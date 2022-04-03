@@ -81,7 +81,7 @@ public class ParticleBasePacket {
 
             if(SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
 
-                world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),
+                world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),true,
                         x, y, z, 0, 0, 0);
 
             }

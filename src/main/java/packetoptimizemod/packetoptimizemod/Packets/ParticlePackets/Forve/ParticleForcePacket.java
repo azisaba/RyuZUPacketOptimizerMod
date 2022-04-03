@@ -64,7 +64,7 @@ public class ParticleForcePacket extends ParticleBasePacket {
             double y = packet.y.get(i);
             double z = packet.z.get(i);
 
-            world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),
+            world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),true,
                     x, y, z, 0, 0, 0);
         }
     }

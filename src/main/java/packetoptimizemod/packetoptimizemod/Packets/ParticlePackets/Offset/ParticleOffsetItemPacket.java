@@ -99,7 +99,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
                     double offz = -packet.speed + ParticleBasePacket.random.nextDouble() * packet.speed * 2;
 
                     world.addParticle(
-                            new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid))),
+                            new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Item.getItemById(packet.itemid))),true,
                             x, y, z, offx * 2, offy * 2, offz * 2);
                 }
             }
