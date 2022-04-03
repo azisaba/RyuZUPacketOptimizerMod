@@ -87,20 +87,13 @@ public class ParticleColorPacket extends ParticleBasePacket {
         ClientWorld world = Minecraft.getInstance().world;
         if (world == null) return;
         RedstoneParticleData dust = new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale);
-        ColorFlameParticleData flash = new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale);
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);
             double y = packet.y.get(i);
             double z = packet.z.get(i);
 
             if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
-                /*world.addParticle(
-                        dust, true,
-                        x, y, z, 0, 0, 0);*/
-
-                world.addParticle(
-                        flash,
-                        x, y, z, 0, 0, 0);
+                world.addParticle(dust, x, y, z, 0, 0, 0);
             }
         }
     }

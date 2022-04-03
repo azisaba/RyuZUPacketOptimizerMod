@@ -19,16 +19,16 @@ public class ColorEndRodParticle extends SpriteTexturedParticle {
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
         this.spriteWithAge = spriteWithAge;
-        this.motionX *= (double) 0.1F;
-        this.motionY *= (double) 0.1F;
-        this.motionZ *= (double) 0.1F;
+        this.motionX = motionX;
+        this.motionY = motionY;
+        this.motionZ = motionZ;
         float f = (float) Math.random() * 0.4F + 0.6F;
         this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
         this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
-        this.particleScale *= 0.75F * particleData.getAlpha();
         int i = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
-        this.maxAge = 4;
+        this.maxAge = 60 + this.rand.nextInt(12);
+        this.particleScale *= 0.75F;
         this.selectSpriteWithAge(spriteWithAge);
     }
 

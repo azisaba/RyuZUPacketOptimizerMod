@@ -12,6 +12,7 @@ import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.Part
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleItemPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset.*;
 import packetoptimizemod.packetoptimizemod.Packets.*;
+import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Original.ParticleOriginalColorPacket;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -92,6 +93,10 @@ public class ParticleChannnel {
 
         INSTANCE.registerMessage(ParticleCompressionPacket.ID , ParticleCompressionPacket.class , ParticleCompressionPacket::encode ,
                 ParticleCompressionPacket::decode , ParticleCompressionPacket::onMessageReceived ,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        INSTANCE.registerMessage(ParticleOriginalColorPacket.ID , ParticleOriginalColorPacket.class , ParticleOriginalColorPacket::encode ,
+                ParticleOriginalColorPacket::decode , ParticleOriginalColorPacket::onMessageReceived ,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         INSTANCE.registerMessage(CheckUsingModPacket.ID , CheckUsingModPacket.class , CheckUsingModPacket::encode ,

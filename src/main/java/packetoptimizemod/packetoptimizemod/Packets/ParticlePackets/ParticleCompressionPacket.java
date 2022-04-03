@@ -18,6 +18,7 @@ import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.Part
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleFallingDustPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleItemPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset.*;
+import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Original.ParticleOriginalColorPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,9 @@ public class ParticleCompressionPacket {
                     break;
                 case ParticleForceColorPacket.ID:
                     ParticleForceColorPacket.processMessage(ParticleForceColorPacket.decode(new PacketBuffer(buf)));
+                    break;
+                case ParticleOriginalColorPacket.ID:
+                    ParticleOriginalColorPacket.processMessage(ParticleOriginalColorPacket.decode(new PacketBuffer(buf)));
                     break;
             }
         }

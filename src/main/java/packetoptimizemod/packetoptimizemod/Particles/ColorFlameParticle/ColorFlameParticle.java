@@ -1,4 +1,4 @@
-package packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle;
+package packetoptimizemod.packetoptimizemod.Particles.ColorFlameParticle;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IAnimatedSprite;
@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 
-public class ColorFlashParticle extends SpriteTexturedParticle {
+public class ColorFlameParticle extends SpriteTexturedParticle {
     private final IAnimatedSprite spriteWithAge;
 
-    public ColorFlashParticle(
+    public ColorFlameParticle(
             ClientWorld world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
-            ColorFlashParticleData particleData,
+            ColorFlameParticleData particleData,
             IAnimatedSprite spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
@@ -26,15 +26,24 @@ public class ColorFlashParticle extends SpriteTexturedParticle {
         this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
         this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
-        this.particleScale *= 0.75F * particleData.getAlpha();
-        int i = (int) (8.0D / (Math.random() * 0.8D + 0.2D));
-        this.maxAge = 4;
         this.selectSpriteWithAge(spriteWithAge);
     }
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    }
+
+    @Override
+    public float getScale(float scaleFactor) {
+        float f = ((float)this.age + scaleFactor) / (float)this.maxAge;
+        return this.particleScale * (1.0F - f * f * 0.5F);
+    }
+
+    @Override
+    public void move(double x, double y, double z) {
+        this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
+        this.resetPositionToBB();
     }
 
     @Override
@@ -44,32 +53,17 @@ public class ColorFlashParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public float getScale(float scaleFactor) {
-        return 7.1F * MathHelper.sin(((float)this.age + scaleFactor - 1.0F) * 0.25F * (float)Math.PI);
-    }
-
-    /*@Override
-    public void tick() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        if (this.age++ >= this.maxAge) {
-            this.setExpired();
-        } else {
-            this.selectSpriteWithAge(this.spriteWithAge);
-            this.move(this.motionX, this.motionY, this.motionZ);
-            if (this.posY == this.prevPosY) {
-                this.motionX *= 1.1D;
-                this.motionZ *= 1.1D;
-            }
-
-            this.motionX *= (double) 0.96F;
-            this.motionY *= (double) 0.96F;
-            this.motionZ *= (double) 0.96F;
-            if (this.onGround) {
-                this.motionX *= (double) 0.7F;
-                this.motionZ *= (double) 0.7F;
-            }
+    public int getBrightnessForRender(float partialTick) {
+        float f = ((float)this.age + partialTick) / (float)this.maxAge;
+        f = MathHelper.clamp(f, 0.0F, 1.0F);
+        int i = super.getBrightnessForRender(partialTick);
+        int j = i & 255;
+        int k = i >> 16 & 255;
+        j = j + (int)(f * 15.0F * 16.0F);
+        if (j > 240) {
+            j = 240;
         }
-    }*/
+
+        return j | k << 16;
+    }
 }
