@@ -14,9 +14,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class ColorFlameParticleData implements IParticleData {
-    public static final ColorFlameParticleData COLOR_FLAME = new ColorFlameParticleData(1.0F, 0.0F, 0.0F, 1.0F);
-    public static final Codec<ColorFlameParticleData> field_239802_b_ = RecordCodecBuilder.create((p_239803_0_) -> {
+public class ColorEndRodParticleData implements IParticleData {
+    public static final ColorEndRodParticleData COLOR_FLAME = new ColorEndRodParticleData(1.0F, 0.0F, 0.0F, 1.0F);
+    public static final Codec<ColorEndRodParticleData> field_239802_b_ = RecordCodecBuilder.create((p_239803_0_) -> {
         return p_239803_0_.group(Codec.FLOAT.fieldOf("r").forGetter((p_239807_0_) -> {
             return p_239807_0_.red;
         }), Codec.FLOAT.fieldOf("g").forGetter((p_239806_0_) -> {
@@ -25,10 +25,10 @@ public class ColorFlameParticleData implements IParticleData {
             return p_239805_0_.blue;
         }), Codec.FLOAT.fieldOf("scale").forGetter((p_239804_0_) -> {
             return p_239804_0_.alpha;
-        })).apply(p_239803_0_, ColorFlameParticleData::new);
+        })).apply(p_239803_0_, ColorEndRodParticleData::new);
     });
-    public static final IDeserializer<ColorFlameParticleData> DESERIALIZER = new IDeserializer<ColorFlameParticleData>() {
-        public ColorFlameParticleData deserialize(ParticleType<ColorFlameParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
+    public static final IDeserializer<ColorEndRodParticleData> DESERIALIZER = new IDeserializer<ColorEndRodParticleData>() {
+        public ColorEndRodParticleData deserialize(ParticleType<ColorEndRodParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float f = (float) reader.readDouble();
             reader.expect(' ');
@@ -37,16 +37,16 @@ public class ColorFlameParticleData implements IParticleData {
             float f2 = (float) reader.readDouble();
             reader.expect(' ');
             float f3 = (float) reader.readDouble();
-            return new ColorFlameParticleData(f, f1, f2, f3);
+            return new ColorEndRodParticleData(f, f1, f2, f3);
         }
 
-        public ColorFlameParticleData read(ParticleType<ColorFlameParticleData> particleTypeIn, PacketBuffer buffer) {
-            return new ColorFlameParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+        public ColorEndRodParticleData read(ParticleType<ColorEndRodParticleData> particleTypeIn, PacketBuffer buffer) {
+            return new ColorEndRodParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
 
-    public ParticleType<ColorFlameParticleData> getType() {
-        return ColorFlameParticleSetup.particleType;
+    public ParticleType<ColorEndRodParticleData> getType() {
+        return ColorEndRodParticleSetup.particleType;
     }
 
     private final float red;
@@ -54,7 +54,7 @@ public class ColorFlameParticleData implements IParticleData {
     private final float blue;
     private final float alpha;
 
-    public ColorFlameParticleData(float red, float green, float blue, float alpha) {
+    public ColorEndRodParticleData(float red, float green, float blue, float alpha) {
         this.red = red;
         this.green = green;
         this.blue = blue;

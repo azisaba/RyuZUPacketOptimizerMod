@@ -7,19 +7,19 @@ import net.minecraft.client.world.ClientWorld;
 
 import javax.annotation.Nullable;
 
-public class ColorFlameParticleFactory implements IParticleFactory<ColorFlameParticleData> {
+public class ColorEndRodParticleFactory implements IParticleFactory<ColorEndRodParticleData> {
     private final IAnimatedSprite spriteSet;
 
-    public ColorFlameParticleFactory(IAnimatedSprite spriteSet) {
+    public ColorEndRodParticleFactory(IAnimatedSprite spriteSet) {
         this.spriteSet = spriteSet;
     }
 
     @Nullable
     @Override
     public Particle makeParticle(
-            ColorFlameParticleData typeIn, ClientWorld worldIn,
+            ColorEndRodParticleData typeIn, ClientWorld worldIn,
             double x, double y, double z, double xSpeed, double ySpeed, double zSpeed
     ) {
-        return new ColorFlameParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);
+        return new ColorEndRodParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);
     }
 }

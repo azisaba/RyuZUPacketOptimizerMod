@@ -10,18 +10,18 @@ import net.minecraftforge.fml.common.Mod;
 import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
 
 @Mod.EventBusSubscriber(modid = PacketOptimizeMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ColorFlameParticleSetup {
-    public static ParticleType<ColorFlameParticleData> particleType;
+public class ColorEndRodParticleSetup {
+    public static ParticleType<ColorEndRodParticleData> particleType;
 
     @SubscribeEvent
     public static void onTypeRegistration(RegistryEvent.Register<ParticleType<?>> event) {
-        particleType = new ColorFlameParticleType();
+        particleType = new ColorEndRodParticleType();
         particleType.setRegistryName(PacketOptimizeMod.MOD_ID, "color_flame");
         event.getRegistry().register(particleType);
     }
 
     @SubscribeEvent
     public static void onFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(particleType, ColorFlameParticleFactory::new);
+        Minecraft.getInstance().particles.registerFactory(particleType, ColorEndRodParticleFactory::new);
     }
 }

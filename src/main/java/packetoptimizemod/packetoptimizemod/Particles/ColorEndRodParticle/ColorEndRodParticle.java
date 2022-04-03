@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 
-public class ColorFlameParticle extends SpriteTexturedParticle {
+public class ColorEndRodParticle extends SpriteTexturedParticle {
     private final IAnimatedSprite spriteWithAge;
 
-    public ColorFlameParticle(
+    public ColorEndRodParticle(
             ClientWorld world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
-            ColorFlameParticleData particleData,
+            ColorEndRodParticleData particleData,
             IAnimatedSprite spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
