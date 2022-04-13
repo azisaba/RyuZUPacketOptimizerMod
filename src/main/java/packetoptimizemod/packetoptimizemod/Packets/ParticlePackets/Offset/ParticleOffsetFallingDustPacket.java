@@ -22,13 +22,13 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
     protected final int blockid;
     protected final int data;
 
-    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int data, int blockid) {
+    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int blockid, int data) {
         super(type, count, speed);
         this.blockid = blockid;
         this.data = data;
     }
 
-    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int data, int blockid, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
+    public ParticleOffsetFallingDustPacket(int type, int count, float speed, int blockid, int data, List<Double> x, List<Double> y, List<Double> z, List<Float> offx, List<Float> offy, List<Float> offz) {
         super(type, count, speed, x, y, z, offx, offy, offz);
         this.blockid = blockid;
         this.data = data;
@@ -77,6 +77,8 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
             offy.add(buffer.readFloat());
             offz.add(buffer.readFloat());
         }
+
+
         return new ParticleOffsetFallingDustPacket(type, count, speed, blockid, data, x, y, z, offx, offy, offz);
     }
 

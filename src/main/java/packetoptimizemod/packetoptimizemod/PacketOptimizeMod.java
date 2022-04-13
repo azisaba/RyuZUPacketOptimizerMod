@@ -16,7 +16,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle.ColorComposterParticleSetup;
+import packetoptimizemod.packetoptimizemod.Particles.ColorCritParticle.ColorCritParticleSetup;
 import packetoptimizemod.packetoptimizemod.Particles.ColorEndRodParticle.ColorEndRodParticleSetup;
+import packetoptimizemod.packetoptimizemod.Particles.ColorFireworkParticle.ColorFireworkParticleSetup;
 import packetoptimizemod.packetoptimizemod.Particles.ColorFlameParticle.ColorFlameParticleSetup;
 import packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle.ColorFlashParticle;
 import packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle.ColorFlashParticleSetup;
@@ -45,6 +48,9 @@ public class PacketOptimizeMod {
         FMLJavaModLoadingContext.get().getModEventBus().register(ColorFlashParticleSetup.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(ColorFlameParticleSetup.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(ColorEndRodParticleSetup.class);
+        FMLJavaModLoadingContext.get().getModEventBus().register(ColorComposterParticleSetup.class);
+        FMLJavaModLoadingContext.get().getModEventBus().register(ColorCritParticleSetup.class);
+        FMLJavaModLoadingContext.get().getModEventBus().register(ColorFireworkParticleSetup.class);
 
         // Register ourselves for server and other game events we are interested in
         LOGGER.info("msg");

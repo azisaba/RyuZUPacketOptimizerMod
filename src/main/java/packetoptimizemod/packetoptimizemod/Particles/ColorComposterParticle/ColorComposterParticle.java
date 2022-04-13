@@ -1,26 +1,22 @@
-package packetoptimizemod.packetoptimizemod.Particles.ColorEndRodParticle;
+package packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SimpleAnimatedParticle;
 import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import packetoptimizemod.packetoptimizemod.Particles.ColorEndRodParticle.ColorEndRodParticleData;
 
-import java.awt.*;
-
-public class ColorEndRodParticle extends SimpleAnimatedParticle {
+public class ColorComposterParticle extends SpriteTexturedParticle {
     private final IAnimatedSprite spriteWithAge;
 
-    public ColorEndRodParticle(
+    public ColorComposterParticle(
             ClientWorld world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
-            ColorEndRodParticleData particleData,
+            ColorComposterParticleData particleData,
             IAnimatedSprite spriteWithAge
     ) {
-        super(world, x, y, z, spriteWithAge, -5.0E-4F);
+        super(world, x, y, z, motionX, motionY, motionZ);
         this.spriteWithAge = spriteWithAge;
         this.motionX = motionX;
         this.motionY = motionY;
@@ -29,22 +25,35 @@ public class ColorEndRodParticle extends SimpleAnimatedParticle {
         this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
         this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
         this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
-        this.maxAge = 60 + this.rand.nextInt(12);
-        this.particleScale *= 0.75F;
-
-        Color color = new Color(Math.round(particleRed * 255) / 2,Math.round(particleGreen * 255) / 2,Math.round(particleBlue * 255) / 2);
-        String hex = Integer.toHexString(color.getRGB() & 0xffffff);
-        if (hex.length() < 6) {
-            hex = "0" + hex;
-        }
-
-        this.setColorFade(Integer.parseInt(hex, 16));
+        this.setSize(0.02F, 0.02F);
+        this.maxAge = 3 + world.getRandom().nextInt(5);
+        this.particleScale *= this.rand.nextFloat() * 0.6F + 0.5F;
         this.selectSpriteWithAge(spriteWithAge);
+    }
+
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
     public void move(double x, double y, double z) {
         this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
         this.resetPositionToBB();
+    }
+
+    @Override
+    public void tick() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        if (this.maxAge-- <= 0) {
+            this.setExpired();
+        } else {
+            this.move(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.99D;
+            this.motionY *= 0.99D;
+            this.motionZ *= 0.99D;
+        }
     }
 }

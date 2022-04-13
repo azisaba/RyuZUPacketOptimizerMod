@@ -1,4 +1,4 @@
-package packetoptimizemod.packetoptimizemod.Particles.ColorEndRodParticle;
+package packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
@@ -13,50 +13,52 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle.ColorComposterParticle;
+import packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle.ColorComposterParticleData;
 
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = PacketOptimizeMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ColorEndRodParticleSetup {
-    public static ParticleType<ColorEndRodParticleData> particleType;
+public class ColorComposterParticleSetup {
+    public static ParticleType<ColorComposterParticleData> particleType;
 
     @SubscribeEvent
     public static void onTypeRegistration(RegistryEvent.Register<ParticleType<?>> event) {
-        particleType = new ColorEndRodParticleType();
-        particleType.setRegistryName(PacketOptimizeMod.MOD_ID, "color_end_rod");
+        particleType = new ColorComposterParticleType();
+        particleType.setRegistryName(PacketOptimizeMod.MOD_ID, "color_composter");
         event.getRegistry().register(particleType);
     }
 
     @SubscribeEvent
     public static void onFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(particleType, ColorEndRodParticleFactory::new);
+        Minecraft.getInstance().particles.registerFactory(particleType, ColorComposterParticleFactory::new);
     }
 
-    public static class ColorEndRodParticleType extends ParticleType<ColorEndRodParticleData> {
-        public ColorEndRodParticleType() {
-            super(true, ColorEndRodParticleData.DESERIALIZER);
+    public static class ColorComposterParticleType extends ParticleType<ColorComposterParticleData> {
+        public ColorComposterParticleType() {
+            super(true, ColorComposterParticleData.DESERIALIZER);
         }
 
         @Override
-        public Codec<ColorEndRodParticleData> func_230522_e_() {
-            return ColorEndRodParticleData.field_239802_b_;
+        public Codec<ColorComposterParticleData> func_230522_e_() {
+            return ColorComposterParticleData.field_239802_b_;
         }
     }
 
-    public static class ColorEndRodParticleFactory implements IParticleFactory<ColorEndRodParticleData> {
+    public static class ColorComposterParticleFactory implements IParticleFactory<ColorComposterParticleData> {
         private final IAnimatedSprite spriteSet;
 
-        public ColorEndRodParticleFactory(IAnimatedSprite spriteSet) {
+        public ColorComposterParticleFactory(IAnimatedSprite spriteSet) {
             this.spriteSet = spriteSet;
         }
 
         @Nullable
         @Override
         public Particle makeParticle(
-                ColorEndRodParticleData typeIn, ClientWorld worldIn,
+                ColorComposterParticleData typeIn, ClientWorld worldIn,
                 double x, double y, double z, double xSpeed, double ySpeed, double zSpeed
         ) {
-            return new ColorEndRodParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);
+            return new ColorComposterParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);
         }
     }
 }
