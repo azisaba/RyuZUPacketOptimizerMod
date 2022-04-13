@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class SendUsingModPacket {
     public static final byte ID = 0;
-    private static final int version = 4;
+    private static final int version = 5;
 
     public static void encode(SendUsingModPacket packet, PacketBuffer buffer) {
         buffer.writeInt(version);
