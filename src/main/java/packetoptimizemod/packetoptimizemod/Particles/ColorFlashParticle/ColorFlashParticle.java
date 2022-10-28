@@ -1,50 +1,50 @@
 package packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.particle.TexturedParticle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 
-public class ColorFlashParticle extends SpriteTexturedParticle {
-    private final IAnimatedSprite spriteWithAge;
+public class ColorFlashParticle extends TextureSheetParticle {
+    private final SpriteSet spriteWithAge;
 
     public ColorFlashParticle(
-            ClientWorld world, double x, double y, double z,
+            ClientLevel world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
             ColorFlashParticleData particleData,
-            IAnimatedSprite spriteWithAge
+            SpriteSet spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
         this.spriteWithAge = spriteWithAge;
-        this.motionX = motionX;
-        this.motionY = motionY;
-        this.motionZ = motionZ;
+        this.x = motionX;
+        this.y = motionY;
+        this.z = motionZ;
         float f = (float) Math.random() * 0.4F + 0.6F;
-        this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
-        this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
-        this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
-        this.particleScale *= 0.75F * particleData.getAlpha();
-        this.maxAge = 4;
-        this.selectSpriteWithAge(spriteWithAge);
+        this.setColor(
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f,
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f,
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f
+        );
+        this.quadSize *= 0.75F * particleData.getAlpha();
+        this.age = 4;
+        this.setSpriteFromAge(spriteWithAge);
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override
-    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
-        this.setAlphaF(0.6F - ((float)this.age + partialTicks - 1.0F) * 0.25F * 0.5F);
-        super.renderParticle(buffer, renderInfo, partialTicks);
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
+        this.setAlpha(0.6F - ((float)this.age + partialTicks - 1.0F) * 0.25F * 0.5F);
+        super.render(buffer, renderInfo, partialTicks);
     }
 
     @Override
-    public float getScale(float scaleFactor) {
-        return 7.1F * MathHelper.sin(((float)this.age + scaleFactor - 1.0F) * 0.25F * (float)Math.PI);
+    public float getQuadSize(float scaleFactor) {
+        return (float) (7.1F * Math.sin(((float)this.age + scaleFactor - 1.0F) * 0.25F * (float)Math.PI));
     }
 }

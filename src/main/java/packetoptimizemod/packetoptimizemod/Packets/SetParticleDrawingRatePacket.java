@@ -1,16 +1,9 @@
 package packetoptimizemod.packetoptimizemod.Packets;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
-import packetoptimizemod.packetoptimizemod.PacketSystem;
-import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset.ParticleOffsetPacket;
-import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleVectorPacket;
 
 import java.util.function.Supplier;
 
@@ -23,12 +16,12 @@ public class SetParticleDrawingRatePacket {
         this.value = value;
     }
 
-    public static void encode(SetParticleDrawingRatePacket packet, PacketBuffer buffer) {
+    public static void encode(SetParticleDrawingRatePacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.value);
     }
 
-    public static SetParticleDrawingRatePacket decode(PacketBuffer buffer) {
+    public static SetParticleDrawingRatePacket decode(FriendlyByteBuf buffer) {
         int value = buffer.readInt();
         return new SetParticleDrawingRatePacket(value);
     }

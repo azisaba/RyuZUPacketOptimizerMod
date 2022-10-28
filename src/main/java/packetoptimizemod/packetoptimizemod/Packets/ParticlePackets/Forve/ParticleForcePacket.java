@@ -1,10 +1,9 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 
@@ -23,7 +22,7 @@ public class ParticleForcePacket extends ParticleBasePacket {
         super(type, x, y, z);
     }
 
-    public static void encode(ParticleForcePacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleForcePacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
@@ -33,7 +32,7 @@ public class ParticleForcePacket extends ParticleBasePacket {
         }
     }
 
-    public static ParticleForcePacket decode(PacketBuffer buffer) {
+    public static ParticleForcePacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
@@ -57,7 +56,7 @@ public class ParticleForcePacket extends ParticleBasePacket {
     }
 
     public static void processMessage(ParticleForcePacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);

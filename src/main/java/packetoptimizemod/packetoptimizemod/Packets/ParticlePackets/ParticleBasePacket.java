@@ -1,17 +1,18 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
 import packetoptimizemod.packetoptimizemod.PacketSystem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public class ParticleBasePacket {
     public static final byte ID = 1;
@@ -34,7 +35,7 @@ public class ParticleBasePacket {
         this.z = z;
     }
 
-    public static void encode(ParticleBasePacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleBasePacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.x.size());
         for (int i = 0; i < packet.x.size(); i++) {
@@ -48,7 +49,7 @@ public class ParticleBasePacket {
         return this.type == type;
     }
 
-    public static ParticleBasePacket decode(PacketBuffer buffer) {
+    public static ParticleBasePacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int size = buffer.readInt();
         List<Double> x = new ArrayList<>();
@@ -72,7 +73,9 @@ public class ParticleBasePacket {
     }
 
     public static void processMessage(ParticleBasePacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        // get the client world
+        var world = Minecraft.getInstance().level;
+
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);
@@ -80,7 +83,6 @@ public class ParticleBasePacket {
             double z = packet.z.get(i);
 
             if(SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
-
                 world.addParticle(PacketSystem.Particle.values()[packet.type].getTypes(),true,
                         x, y, z, 0, 0, 0);
 

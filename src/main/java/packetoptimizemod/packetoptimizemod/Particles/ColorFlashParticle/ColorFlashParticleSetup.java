@@ -2,11 +2,11 @@ package packetoptimizemod.packetoptimizemod.Particles.ColorFlashParticle;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -29,7 +29,7 @@ public class ColorFlashParticleSetup {
 
     @SubscribeEvent
     public static void onFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(particleType, ColorFlashParticleFactory::new);
+        Minecraft.getInstance().particleEngine.register(particleType, ColorFlashParticleFactory::new);
     }
 
     public static class ColorFlashParticleType extends ParticleType<ColorFlashParticleData> {
@@ -38,22 +38,22 @@ public class ColorFlashParticleSetup {
         }
 
         @Override
-        public Codec<ColorFlashParticleData> func_230522_e_() {
+        public Codec<ColorFlashParticleData> codec() {
             return ColorFlashParticleData.field_239802_b_;
         }
     }
 
-    public static class ColorFlashParticleFactory implements IParticleFactory<ColorFlashParticleData> {
-        private final IAnimatedSprite spriteSet;
+    public static class ColorFlashParticleFactory implements ParticleProvider<ColorFlashParticleData> {
+        private final SpriteSet spriteSet;
 
-        public ColorFlashParticleFactory(IAnimatedSprite spriteSet) {
+        public ColorFlashParticleFactory(SpriteSet spriteSet) {
             this.spriteSet = spriteSet;
         }
 
         @Nullable
         @Override
-        public Particle makeParticle(
-                ColorFlashParticleData typeIn, ClientWorld worldIn,
+        public Particle createParticle(
+                ColorFlashParticleData typeIn, ClientLevel worldIn,
                 double x, double y, double z, double xSpeed, double ySpeed, double zSpeed
         ) {
             return new ColorFlashParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);

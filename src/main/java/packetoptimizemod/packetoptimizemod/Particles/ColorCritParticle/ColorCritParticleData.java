@@ -4,18 +4,17 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import packetoptimizemod.packetoptimizemod.Particles.ColorCritParticle.ColorCritParticleSetup;
 
 import java.util.Locale;
 
-public class ColorCritParticleData implements IParticleData {
+public class ColorCritParticleData implements ParticleOptions {
     public static final ColorCritParticleData COLOR_CRIT = new ColorCritParticleData(1.0F, 0.0F, 0.0F, 1.0F);
     public static final Codec<ColorCritParticleData> field_239802_b_ = RecordCodecBuilder.create((p_239803_0_) -> {
         return p_239803_0_.group(Codec.FLOAT.fieldOf("r").forGetter((p_239807_0_) -> {
@@ -28,8 +27,8 @@ public class ColorCritParticleData implements IParticleData {
             return p_239804_0_.alpha;
         })).apply(p_239803_0_, ColorCritParticleData::new);
     });
-    public static final IDeserializer<ColorCritParticleData> DESERIALIZER = new IDeserializer<ColorCritParticleData>() {
-        public ColorCritParticleData deserialize(ParticleType<ColorCritParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
+    public static final ParticleOptions.Deserializer<ColorCritParticleData> DESERIALIZER = new ParticleOptions.Deserializer<ColorCritParticleData>() {
+        public ColorCritParticleData fromCommand(ParticleType<ColorCritParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float f = (float) reader.readDouble();
             reader.expect(' ');
@@ -41,7 +40,7 @@ public class ColorCritParticleData implements IParticleData {
             return new ColorCritParticleData(f, f1, f2, f3);
         }
 
-        public ColorCritParticleData read(ParticleType<ColorCritParticleData> particleTypeIn, PacketBuffer buffer) {
+        public ColorCritParticleData fromNetwork(ParticleType<ColorCritParticleData> particleTypeIn, FriendlyByteBuf buffer) {
             return new ColorCritParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
@@ -59,17 +58,19 @@ public class ColorCritParticleData implements IParticleData {
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.alpha = MathHelper.clamp(alpha, 0.01F, 4.0F);
+        this.alpha = Mth.clamp(alpha, 0.01F, 4.0F);
     }
 
-    public void write(PacketBuffer buffer) {
+    @Override
+    public void writeToNetwork(FriendlyByteBuf buffer) {
         buffer.writeFloat(this.red);
         buffer.writeFloat(this.green);
         buffer.writeFloat(this.blue);
         buffer.writeFloat(this.alpha);
     }
 
-    public String getParameters() {
+    @Override
+    public String writeToString() {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()), this.red, this.green, this.blue, this.alpha);
     }
 

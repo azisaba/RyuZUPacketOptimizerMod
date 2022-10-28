@@ -2,16 +2,11 @@ package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
-import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve.ParticleForceColorPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve.ParticleForcePacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleBlockPacket;
@@ -37,7 +32,7 @@ public class ParticleCompressionPacket {
         this.packets = packets;
     }
 
-    public static void encode(ParticleCompressionPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleCompressionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.packets.size());
         for (ByteBuf buf : packet.packets) {
@@ -46,7 +41,7 @@ public class ParticleCompressionPacket {
         }
     }
 
-    public static ParticleCompressionPacket decode(PacketBuffer buffer) {
+    public static ParticleCompressionPacket decode(FriendlyByteBuf buffer) {
         int size = buffer.readInt();
         List<ByteBuf> packets = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -65,55 +60,55 @@ public class ParticleCompressionPacket {
     }
 
     public static void processMessage(ParticleCompressionPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        ClientLevel world = Minecraft.getInstance().level;
         if (world == null) return;
         for (ByteBuf buf : packet.packets) {
             int id = buf.readByte();
             switch (id) {
                 case ParticleBasePacket.ID:
-                    ParticleBasePacket.processMessage(ParticleBasePacket.decode(new PacketBuffer(buf)));
+                    ParticleBasePacket.processMessage(ParticleBasePacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleBlockPacket.ID:
-                    ParticleBlockPacket.processMessage(ParticleBlockPacket.decode(new PacketBuffer(buf)));
+                    ParticleBlockPacket.processMessage(ParticleBlockPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleColorPacket.ID:
-                    ParticleColorPacket.processMessage(ParticleColorPacket.decode(new PacketBuffer(buf)));
+                    ParticleColorPacket.processMessage(ParticleColorPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleCountPacket.ID:
-                    ParticleCountPacket.processMessage(ParticleCountPacket.decode(new PacketBuffer(buf)));
+                    ParticleCountPacket.processMessage(ParticleCountPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOffsetPacket.ID:
-                    ParticleOffsetPacket.processMessage(ParticleOffsetPacket.decode(new PacketBuffer(buf)));
+                    ParticleOffsetPacket.processMessage(ParticleOffsetPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleVectorPacket.ID:
-                    ParticleVectorPacket.processMessage(ParticleVectorPacket.decode(new PacketBuffer(buf)));
+                    ParticleVectorPacket.processMessage(ParticleVectorPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleForcePacket.ID:
-                    ParticleForcePacket.processMessage(ParticleForcePacket.decode(new PacketBuffer(buf)));
+                    ParticleForcePacket.processMessage(ParticleForcePacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleFallingDustPacket.ID:
-                    ParticleFallingDustPacket.processMessage(ParticleFallingDustPacket.decode(new PacketBuffer(buf)));
+                    ParticleFallingDustPacket.processMessage(ParticleFallingDustPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleItemPacket.ID:
-                    ParticleItemPacket.processMessage(ParticleItemPacket.decode(new PacketBuffer(buf)));
+                    ParticleItemPacket.processMessage(ParticleItemPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOffsetBlockPacket.ID:
-                    ParticleOffsetBlockPacket.processMessage(ParticleOffsetBlockPacket.decode(new PacketBuffer(buf)));
+                    ParticleOffsetBlockPacket.processMessage(ParticleOffsetBlockPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOffsetItemPacket.ID:
-                    ParticleOffsetItemPacket.processMessage(ParticleOffsetItemPacket.decode(new PacketBuffer(buf)));
+                    ParticleOffsetItemPacket.processMessage(ParticleOffsetItemPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOffsetFallingDustPacket.ID:
-                    ParticleOffsetFallingDustPacket.processMessage(ParticleOffsetFallingDustPacket.decode(new PacketBuffer(buf)));
+                    ParticleOffsetFallingDustPacket.processMessage(ParticleOffsetFallingDustPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOffsetColorPacket.ID:
-                    ParticleOffsetColorPacket.processMessage(ParticleOffsetColorPacket.decode(new PacketBuffer(buf)));
+                    ParticleOffsetColorPacket.processMessage(ParticleOffsetColorPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleForceColorPacket.ID:
-                    ParticleForceColorPacket.processMessage(ParticleForceColorPacket.decode(new PacketBuffer(buf)));
+                    ParticleForceColorPacket.processMessage(ParticleForceColorPacket.decode(new FriendlyByteBuf(buf)));
                     break;
                 case ParticleOriginalColorPacket.ID:
-                    ParticleOriginalColorPacket.processMessage(ParticleOriginalColorPacket.decode(new PacketBuffer(buf)));
+                    ParticleOriginalColorPacket.processMessage(ParticleOriginalColorPacket.decode(new FriendlyByteBuf(buf)));
                     break;
             }
         }

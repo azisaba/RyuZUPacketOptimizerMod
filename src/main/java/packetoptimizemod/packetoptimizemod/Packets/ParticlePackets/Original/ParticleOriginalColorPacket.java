@@ -1,11 +1,9 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Original;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleVectorPacket;
@@ -61,7 +59,7 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
         return this.type == type && this.speed == speed;
     }
 
-    public static void encode(ParticleOriginalColorPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleOriginalColorPacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.r);
@@ -80,7 +78,7 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
         }
     }
 
-    public static ParticleOriginalColorPacket decode(PacketBuffer buffer) {
+    public static ParticleOriginalColorPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float r = buffer.readFloat();
@@ -115,7 +113,7 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
     }
 
     public static void processMessage(ParticleOriginalColorPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             if (packet.count == 0) {

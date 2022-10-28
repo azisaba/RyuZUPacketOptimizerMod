@@ -1,10 +1,10 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.PacketSystem;
 
@@ -34,7 +34,7 @@ public class ParticleCountPacket extends ParticleBasePacket {
         return this.type == type && this.count == count && this.speed == speed;
     }
 
-    public static void encode(ParticleCountPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleCountPacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
@@ -46,7 +46,7 @@ public class ParticleCountPacket extends ParticleBasePacket {
         }
     }
 
-    public static ParticleCountPacket decode(PacketBuffer buffer) {
+    public static ParticleCountPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -71,7 +71,7 @@ public class ParticleCountPacket extends ParticleBasePacket {
     }
 
     public static void processMessage(ParticleCountPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         int count = packet.count == 810 ? 1 : packet.count;
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {

@@ -1,14 +1,12 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 
@@ -38,7 +36,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
         return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
-    public static void encode(ParticleOffsetFallingDustPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleOffsetFallingDustPacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
@@ -56,7 +54,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
         }
     }
 
-    public static ParticleOffsetFallingDustPacket decode(PacketBuffer buffer) {
+    public static ParticleOffsetFallingDustPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -91,7 +89,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
     }
 
     public static void processMessage(ParticleOffsetFallingDustPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {
@@ -105,7 +103,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
                     double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.FALLING_DUST, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()), true,
+                            new BlockParticleOption(ParticleTypes.FALLING_DUST, Block.stateById(packet.blockid)), true,
                             x, y, z, offx, offy, offz);
                 }
             }

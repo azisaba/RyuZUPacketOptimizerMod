@@ -1,10 +1,9 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleCountPacket;
@@ -32,7 +31,7 @@ public class ParticleOffsetPacket extends ParticleCountPacket {
         this.offz = offz;
     }
 
-    public static void encode(ParticleOffsetPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleOffsetPacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
@@ -47,7 +46,7 @@ public class ParticleOffsetPacket extends ParticleCountPacket {
         }
     }
 
-    public static ParticleOffsetPacket decode(PacketBuffer buffer) {
+    public static ParticleOffsetPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -78,7 +77,7 @@ public class ParticleOffsetPacket extends ParticleCountPacket {
     }
 
     public static void processMessage(ParticleOffsetPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {

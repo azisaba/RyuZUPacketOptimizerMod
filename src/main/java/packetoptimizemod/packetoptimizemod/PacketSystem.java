@@ -1,15 +1,14 @@
 package packetoptimizemod.packetoptimizemod;
 
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 
 public class PacketSystem {
     public enum Particle {
         AMBIENT_ENTITY_EFFECT(ParticleTypes.AMBIENT_ENTITY_EFFECT),
         ANGRY_VILLAGER(ParticleTypes.ANGRY_VILLAGER),
-        BARRIER(ParticleTypes.BARRIER),
         BLOCK(null),
+        BLOCK_MARKER(null),
         BUBBLE(ParticleTypes.BUBBLE),
         CLOUD(ParticleTypes.CLOUD),
         CRIT(ParticleTypes.CRIT),
@@ -21,10 +20,11 @@ public class PacketSystem {
         DRIPPING_WATER(ParticleTypes.DRIPPING_WATER),
         FALLING_WATER(ParticleTypes.FALLING_WATER),
         DUST(null),
+        DUST_COLOR_TRANSITION(null),
         EFFECT(ParticleTypes.EFFECT),
         ELDER_GUARDIAN(ParticleTypes.ELDER_GUARDIAN),
         ENCHANTED_HIT(ParticleTypes.ENCHANTED_HIT),
-        ENCHANTENCHANT(ParticleTypes.ENCHANT),
+        ENCHANT(ParticleTypes.ENCHANT),
         END_ROD(ParticleTypes.END_ROD),
         ENTITY_EFFECT(ParticleTypes.ENTITY_EFFECT),
         EXPLOSION_EMITTER(ParticleTypes.EXPLOSION_EMITTER),
@@ -41,6 +41,7 @@ public class PacketSystem {
         HEART(ParticleTypes.HEART),
         INSTANT_EFFECT(ParticleTypes.INSTANT_EFFECT),
         ITEM(null),
+        VIBRATION(null),
         ITEM_SLIME(ParticleTypes.ITEM_SLIME),
         ITEM_SNOWBALL(ParticleTypes.ITEM_SNOWBALL),
         LARGE_SMOKE(ParticleTypes.LARGE_SMOKE),
@@ -70,23 +71,37 @@ public class PacketSystem {
         FALLING_HONEY(ParticleTypes.FALLING_HONEY),
         LANDING_HONEY(ParticleTypes.LANDING_HONEY),
         FALLING_NECTAR(ParticleTypes.FALLING_NECTAR),
+        FALLING_SPORE_BLOSSOM(ParticleTypes.FALLING_SPORE_BLOSSOM),
         ASH(ParticleTypes.ASH),
         CRIMSON_SPORE(ParticleTypes.CRIMSON_SPORE),
         WARPED_SPORE(ParticleTypes.WARPED_SPORE),
+        SPORE_BLOSSOM_AIR(ParticleTypes.SPORE_BLOSSOM_AIR),
         DRIPPING_OBSIDIAN_TEAR(ParticleTypes.DRIPPING_OBSIDIAN_TEAR),
         FALLING_OBSIDIAN_TEAR(ParticleTypes.FALLING_OBSIDIAN_TEAR),
         LANDING_OBSIDIAN_TEAR(ParticleTypes.LANDING_OBSIDIAN_TEAR),
         REVERSE_PORTAL(ParticleTypes.REVERSE_PORTAL),
-        WHITE_ASH(ParticleTypes.WHITE_ASH);
+        WHITE_ASH(ParticleTypes.WHITE_ASH),
+        SMALL_FLAME(ParticleTypes.SMALL_FLAME),
+        SNOWFLAKE(ParticleTypes.SNOWFLAKE),
+        DRIPPING_DRIPSTONE_LAVA(ParticleTypes.DRIPPING_DRIPSTONE_LAVA),
+        FALLING_DRIPSTONE_LAVA(ParticleTypes.FALLING_DRIPSTONE_LAVA),
+        DRIPPING_DRIPSTONE_WATER(ParticleTypes.DRIPPING_DRIPSTONE_WATER),
+        FALLING_DRIPSTONE_WATER(ParticleTypes.FALLING_DRIPSTONE_WATER),
+        GLOW_SQUID_INK(ParticleTypes.GLOW_SQUID_INK),
+        GLOW(ParticleTypes.GLOW),
+        WAX_ON(ParticleTypes.WAX_ON),
+        WAX_OFF(ParticleTypes.WAX_OFF),
+        ELECTRIC_SPARK(ParticleTypes.ELECTRIC_SPARK),
+        SCRAPE(ParticleTypes.SCRAPE);
 
 
-        private IParticleData types;
+        private ParticleOptions types;
 
-        Particle(IParticleData types) {
+        Particle(ParticleOptions types) {
             this.types = types;
         }
 
-        public IParticleData getTypes() {
+        public ParticleOptions getTypes() {
             return types;
         }
     }

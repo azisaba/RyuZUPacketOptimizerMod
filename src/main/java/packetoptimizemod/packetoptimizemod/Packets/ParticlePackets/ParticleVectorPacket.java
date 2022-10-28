@@ -1,12 +1,9 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.PacketSystem;
 
@@ -41,7 +38,7 @@ public class ParticleVectorPacket extends ParticleBasePacket {
         return this.type == type && this.speed == speed;
     }
 
-    public static void encode(ParticleVectorPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleVectorPacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeFloat(packet.speed);
         buffer.writeInt(packet.x.size());
@@ -55,7 +52,7 @@ public class ParticleVectorPacket extends ParticleBasePacket {
         }
     }
 
-    public static ParticleVectorPacket decode(PacketBuffer buffer) {
+    public static ParticleVectorPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         float speed = buffer.readFloat();
         int size = buffer.readInt();
@@ -85,7 +82,7 @@ public class ParticleVectorPacket extends ParticleBasePacket {
     }
 
     public static void processMessage(ParticleVectorPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);
