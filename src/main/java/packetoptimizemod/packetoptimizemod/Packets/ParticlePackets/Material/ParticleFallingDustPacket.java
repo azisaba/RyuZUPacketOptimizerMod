@@ -5,9 +5,12 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleCountPacket;
 
 import java.util.ArrayList;
@@ -79,7 +82,7 @@ public class ParticleFallingDustPacket extends ParticleCountPacket {
     public static void processMessage(ParticleFallingDustPacket packet) {
         var world = Minecraft.getInstance().level;
         if (world == null) return;
-        var falling_dust = new BlockParticleOption(ParticleTypes.BLOCK, Block.stateById(packet.blockid));
+        var falling_dust = new BlockParticleOption(ParticleTypes.FALLING_DUST, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState());
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < packet.count; n++) {
                 double x = packet.x.get(i);

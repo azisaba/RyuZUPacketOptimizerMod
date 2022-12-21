@@ -6,7 +6,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 
 public class ColorComposterParticle extends TextureSheetParticle {
-    private final SpriteSet spriteWithAge;
 
     public ColorComposterParticle(
             ClientLevel world, double x, double y, double z,
@@ -15,10 +14,6 @@ public class ColorComposterParticle extends TextureSheetParticle {
             SpriteSet spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
-        this.spriteWithAge = spriteWithAge;
-        this.x = motionX;
-        this.y = motionY;
-        this.z = motionZ;
         float f = (float) Math.random() * 0.4F + 0.6F;
         this.setColor(
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f,
@@ -26,9 +21,12 @@ public class ColorComposterParticle extends TextureSheetParticle {
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f
         );
         this.setSize(0.02F, 0.02F);
-        this.age = 3 + world.getRandom().nextInt(5);
         this.quadSize *= this.random.nextFloat() * 0.6F + 0.5F;
-        this.setSpriteFromAge(spriteWithAge);
+        this.lifetime = 3 + world.getRandom().nextInt(5);
+        this.xd *= (double)0.02F;
+        this.yd *= (double)0.02F;
+        this.zd *= (double)0.02F;
+        this.pickSprite(spriteWithAge);
     }
 
     @Override

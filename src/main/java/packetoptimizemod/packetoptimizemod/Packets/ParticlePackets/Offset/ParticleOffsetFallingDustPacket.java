@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 
 import java.util.ArrayList;
@@ -103,7 +105,7 @@ public class ParticleOffsetFallingDustPacket extends ParticleOffsetPacket {
                     double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new BlockParticleOption(ParticleTypes.FALLING_DUST, Block.stateById(packet.blockid)), true,
+                            new BlockParticleOption(ParticleTypes.FALLING_DUST, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState()), true,
                             x, y, z, offx, offy, offz);
                 }
             }

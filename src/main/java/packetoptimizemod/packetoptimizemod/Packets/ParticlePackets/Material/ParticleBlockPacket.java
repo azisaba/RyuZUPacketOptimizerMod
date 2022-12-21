@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleCountPacket;
 
 import java.util.ArrayList;
@@ -80,7 +82,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
 
         var world = Minecraft.getInstance().level;
         if (world == null) return;
-        var block = new BlockParticleOption(ParticleTypes.BLOCK, Block.stateById(packet.blockid));
+        var block = new BlockParticleOption(ParticleTypes.BLOCK, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState());
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < packet.count; n++) {
                 double x = packet.x.get(i);

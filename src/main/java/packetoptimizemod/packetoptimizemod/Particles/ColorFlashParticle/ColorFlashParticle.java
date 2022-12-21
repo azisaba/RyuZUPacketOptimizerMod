@@ -8,8 +8,6 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 
 public class ColorFlashParticle extends TextureSheetParticle {
-    private final SpriteSet spriteWithAge;
-
     public ColorFlashParticle(
             ClientLevel world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
@@ -17,19 +15,14 @@ public class ColorFlashParticle extends TextureSheetParticle {
             SpriteSet spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
-        this.spriteWithAge = spriteWithAge;
-        this.x = motionX;
-        this.y = motionY;
-        this.z = motionZ;
         float f = (float) Math.random() * 0.4F + 0.6F;
         this.setColor(
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f,
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f,
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f
         );
-        this.quadSize *= 0.75F * particleData.getAlpha();
-        this.age = 4;
-        this.setSpriteFromAge(spriteWithAge);
+        this.lifetime = 4;
+        this.pickSprite(spriteWithAge);
     }
 
     @Override

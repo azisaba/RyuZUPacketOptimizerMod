@@ -7,7 +7,6 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 
 public class ColorCritParticle extends TextureSheetParticle {
-    private final SpriteSet spriteWithAge;
 
     public ColorCritParticle(
             ClientLevel world, double x, double y, double z,
@@ -16,10 +15,14 @@ public class ColorCritParticle extends TextureSheetParticle {
             SpriteSet spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
-        this.x = motionX;
-        this.y = motionY;
-        this.z = motionZ;
-        this.spriteWithAge = spriteWithAge;
+        this.friction = 0.7F;
+        this.gravity = 0.5F;
+        this.xd *= (double)0.1F;
+        this.yd *= (double)0.1F;
+        this.zd *= (double)0.1F;
+        this.xd += motionX * 0.4D;
+        this.yd += motionY * 0.4D;
+        this.zd += motionZ * 0.4D;
         float f = (float) Math.random() * 0.4F + 0.6F;
         this.setColor(
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f,
@@ -27,9 +30,10 @@ public class ColorCritParticle extends TextureSheetParticle {
                 ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f
         );
         this.quadSize *= 0.75F;
-        this.age = Math.max((int)(6.0D / (Math.random() * 0.8D + 0.6D)), 1);
+//        this.lifetime = Math.max((int)(6.0D / (Math.random() * 0.8D + 0.6D)), 1);
+        this.lifetime = 20;
         this.hasPhysics = false;
-        this.setSpriteFromAge(spriteWithAge);
+        this.pickSprite(spriteWithAge);
         this.tick();
     }
 
@@ -40,7 +44,7 @@ public class ColorCritParticle extends TextureSheetParticle {
 
     @Override
     public float getQuadSize(float scaleFactor) {
-        return this.quadSize * Mth.clamp(((float)this.age + scaleFactor) / (float)this.age * 32.0F, 0.0F, 1.0F);
+        return this.quadSize * Mth.clamp(((float)this.age + scaleFactor) / (float)this.lifetime * 32.0F, 0.0F, 1.0F);
     }
 
     @Override

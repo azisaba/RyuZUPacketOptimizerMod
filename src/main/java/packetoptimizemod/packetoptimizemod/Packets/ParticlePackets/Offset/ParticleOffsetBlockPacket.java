@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +91,7 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
 
     public static void processMessage(ParticleOffsetBlockPacket packet) {
         var world = Minecraft.getInstance().level;
+
         if (world == null) return;
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {
@@ -102,7 +105,7 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
                     double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new BlockParticleOption(ParticleTypes.BLOCK, Block.stateById(packet.blockid)), true,
+                            new BlockParticleOption(ParticleTypes.BLOCK, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState()), true,
                             x, y, z, offx, offy, offz);
                 }
             }
