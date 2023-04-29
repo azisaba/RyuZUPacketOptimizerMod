@@ -1,15 +1,17 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
         return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
-    public static void encode(ParticleOffsetBlockPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleOffsetBlockPacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
@@ -55,7 +57,7 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
         }
     }
 
-    public static ParticleOffsetBlockPacket decode(PacketBuffer buffer) {
+    public static ParticleOffsetBlockPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -88,7 +90,8 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
     }
 
     public static void processMessage(ParticleOffsetBlockPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
+
         if (world == null) return;
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {
@@ -102,7 +105,7 @@ public class ParticleOffsetBlockPacket extends ParticleOffsetPacket {
                     double offz = random.nextGaussian() * packet.speed;
 
                     world.addParticle(
-                            new BlockParticleData(ParticleTypes.BLOCK, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState()), true,
+                            new BlockParticleOption(ParticleTypes.BLOCK, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState()), true,
                             x, y, z, offx, offy, offz);
                 }
             }

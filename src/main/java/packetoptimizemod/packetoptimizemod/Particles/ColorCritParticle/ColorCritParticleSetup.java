@@ -2,11 +2,11 @@ package packetoptimizemod.packetoptimizemod.Particles.ColorCritParticle;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -31,7 +31,7 @@ public class ColorCritParticleSetup {
 
     @SubscribeEvent
     public static void onFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(particleType, ColorCritParticleFactory::new);
+        Minecraft.getInstance().particleEngine.register(particleType, ColorCritParticleFactory::new);
     }
 
     public static class ColorCritParticleType extends ParticleType<ColorCritParticleData> {
@@ -40,22 +40,22 @@ public class ColorCritParticleSetup {
         }
 
         @Override
-        public Codec<ColorCritParticleData> func_230522_e_() {
+        public Codec<ColorCritParticleData> codec() {
             return ColorCritParticleData.field_239802_b_;
         }
     }
 
-    public static class ColorCritParticleFactory implements IParticleFactory<ColorCritParticleData> {
-        private final IAnimatedSprite spriteSet;
+    public static class ColorCritParticleFactory implements ParticleProvider<ColorCritParticleData> {
+        private final SpriteSet spriteSet;
 
-        public ColorCritParticleFactory(IAnimatedSprite spriteSet) {
+        public ColorCritParticleFactory(SpriteSet spriteSet) {
             this.spriteSet = spriteSet;
         }
 
         @Nullable
         @Override
-        public Particle makeParticle(
-                ColorCritParticleData typeIn, ClientWorld worldIn,
+        public Particle createParticle(
+                ColorCritParticleData typeIn, ClientLevel worldIn,
                 double x, double y, double z, double xSpeed, double ySpeed, double zSpeed
         ) {
             return new ColorCritParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, typeIn, spriteSet);

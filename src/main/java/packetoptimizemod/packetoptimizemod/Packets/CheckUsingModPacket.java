@@ -1,13 +1,8 @@
 package packetoptimizemod.packetoptimizemod.Packets;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
-import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleCompressionPacket;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.ParticleChannnel;
 import packetoptimizemod.packetoptimizemod.SendUsingModPacket;
 
@@ -18,11 +13,11 @@ import java.util.function.Supplier;
 public class CheckUsingModPacket {
     public static final byte ID = 17;
 
-    public static void encode(CheckUsingModPacket packet, PacketBuffer buffer) {
+    public static void encode(CheckUsingModPacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
     }
 
-    public static CheckUsingModPacket decode(PacketBuffer buffer) {
+    public static CheckUsingModPacket decode(FriendlyByteBuf buffer) {
         return new CheckUsingModPacket();
     }
 

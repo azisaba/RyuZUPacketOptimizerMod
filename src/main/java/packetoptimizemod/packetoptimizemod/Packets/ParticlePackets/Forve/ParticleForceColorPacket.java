@@ -1,11 +1,11 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleColorPacket;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ParticleForceColorPacket extends ParticleColorPacket {
         super(type, r, b, g, scale, x, y, z);
     }
 
-    public static ParticleForceColorPacket decode(PacketBuffer buffer) {
+    public static ParticleForceColorPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         float r = buffer.readFloat();
         float g = buffer.readFloat();
@@ -52,7 +52,7 @@ public class ParticleForceColorPacket extends ParticleColorPacket {
 
     public static void processMessage(ParticleForceColorPacket packet) {
 
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if(world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {
             double x = packet.x.get(i);
@@ -60,7 +60,7 @@ public class ParticleForceColorPacket extends ParticleColorPacket {
             double z = packet.z.get(i);
 
             world.addParticle(
-                    new RedstoneParticleData(packet.r, packet.g, packet.b, packet.scale),true,
+                    new DustParticleOptions(new Vector3f(packet.r, packet.g, packet.b), packet.scale), true,
                     x, y, z, 0, 0, 0);
         }
     }

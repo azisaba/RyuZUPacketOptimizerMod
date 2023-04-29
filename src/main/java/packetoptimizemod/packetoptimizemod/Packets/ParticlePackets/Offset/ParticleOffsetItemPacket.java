@@ -1,15 +1,14 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 
@@ -39,7 +38,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
         return this.type == type && this.count == count && this.speed == speed && this.itemid == itemid && this.data == data;
     }
 
-    public static void encode(ParticleOffsetItemPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleOffsetItemPacket packet, FriendlyByteBuf buffer) {
         buffer.writeByte(ID);
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
@@ -57,7 +56,7 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
         }
     }
 
-    public static ParticleOffsetItemPacket decode(PacketBuffer buffer) {
+    public static ParticleOffsetItemPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -91,14 +90,14 @@ public class ParticleOffsetItemPacket extends ParticleOffsetPacket {
     }
 
     public static void processMessage(ParticleOffsetItemPacket packet) {
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
-        ItemStack item = new ItemStack(Item.getItemById(packet.itemid));
-        CompoundNBT nbt = item.getTag();
-        if(nbt == null) nbt = new CompoundNBT();
+        ItemStack item = new ItemStack(Item.byId(packet.itemid));
+        var nbt = item.getTag();
+        if(nbt == null) nbt = new CompoundTag();
         nbt.putInt("CustomModelData" , packet.data);
         item.setTag(nbt);
-        ItemParticleData particle = new ItemParticleData(ParticleTypes.ITEM, item);
+        var particle = new ItemParticleOption(ParticleTypes.ITEM, item);
         int count = packet.count == 810 ? 1 : packet.count;
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < count; n++) {

@@ -1,54 +1,51 @@
 package packetoptimizemod.packetoptimizemod.Particles.ColorFlameParticle;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.particle.DeceleratingParticle;
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.RisingParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.util.Mth;
 
-public class ColorFlameParticle extends DeceleratingParticle {
-    private final IAnimatedSprite spriteWithAge;
+public class ColorFlameParticle extends RisingParticle {
 
     public ColorFlameParticle(
-            ClientWorld world, double x, double y, double z,
+            ClientLevel world, double x, double y, double z,
             double motionX, double motionY, double motionZ,
             ColorFlameParticleData particleData,
-            IAnimatedSprite spriteWithAge
+            SpriteSet spriteWithAge
     ) {
         super(world, x, y, z, motionX, motionY, motionZ);
-        this.spriteWithAge = spriteWithAge;
         float f = (float) Math.random() * 0.4F + 0.6F;
-        this.particleRed = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f;
-        this.particleGreen = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f;
-        this.particleBlue = ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f;
-        this.selectSpriteWithAge(spriteWithAge);
+        this.setColor(
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getRed() * f,
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getGreen() * f,
+                ((float) (Math.random() * (double) 0.2F) + 0.8F) * particleData.getBlue() * f
+        );
+        this.pickSprite(spriteWithAge);
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
-    public float getScale(float scaleFactor) {
-        float f = ((float)this.age + scaleFactor) / (float)this.maxAge;
-        return this.particleScale * (1.0F - f * f * 0.5F);
+    public float getQuadSize(float scaleFactor) {
+        float f = ((float)this.age + scaleFactor) / (float)this.lifetime;
+        return this.quadSize * (1.0F - f * f * 0.5F);
     }
 
     @Override
     public void move(double x, double y, double z) {
-        this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
-        this.resetPositionToBB();
+        this.setBoundingBox(this.getBoundingBox().move(x, y, z));
+        this.setLocationFromBoundingbox();
     }
 
     @Override
-    public int getBrightnessForRender(float partialTick) {
-        float f = ((float)this.age + partialTick) / (float)this.maxAge;
-        f = MathHelper.clamp(f, 0.0F, 1.0F);
-        int i = super.getBrightnessForRender(partialTick);
+    public int getLightColor(float partialTick) {
+        float f = ((float)this.age + partialTick) / (float)this.lifetime;
+        f = Mth.clamp(f, 0.0F, 1.0F);
+        int i = super.getLightColor(partialTick);
         int j = i & 255;
         int k = i >> 16 & 255;
         j = j + (int)(f * 15.0F * 16.0F);

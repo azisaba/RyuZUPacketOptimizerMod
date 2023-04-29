@@ -1,15 +1,15 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
+import packetoptimizemod.packetoptimizemod.PacketSystem;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleCountPacket;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
         return this.type == type && this.count == count && this.speed == speed && this.blockid == blockid && this.data == data;
     }
 
-    public static void encode(ParticleBlockPacket packet, PacketBuffer buffer) {
+    public static void encode(ParticleBlockPacket packet, FriendlyByteBuf buffer) {
         buffer.writeInt(packet.type);
         buffer.writeInt(packet.count);
         buffer.writeFloat(packet.speed);
@@ -52,7 +52,7 @@ public class ParticleBlockPacket extends ParticleCountPacket {
         }
     }
 
-    public static ParticleBlockPacket decode(PacketBuffer buffer) {
+    public static ParticleBlockPacket decode(FriendlyByteBuf buffer) {
         int type = buffer.readInt();
         int count = buffer.readInt();
         float speed = buffer.readFloat();
@@ -80,9 +80,9 @@ public class ParticleBlockPacket extends ParticleCountPacket {
 
     public static void processMessage(ParticleBlockPacket packet) {
 
-        ClientWorld world = Minecraft.getInstance().world;
+        var world = Minecraft.getInstance().level;
         if (world == null) return;
-        BlockParticleData block = new BlockParticleData(ParticleTypes.BLOCK, Block.getBlockFromItem(Item.getItemById(packet.blockid)).getDefaultState());
+        var block = new BlockParticleOption(ParticleTypes.BLOCK, PacketSystem.MaterialTypes.values()[packet.blockid].getBlockState());
         for (int i = 0; i < packet.x.size(); i++) {
             for (int n = 0; n < packet.count; n++) {
                 double x = packet.x.get(i);
