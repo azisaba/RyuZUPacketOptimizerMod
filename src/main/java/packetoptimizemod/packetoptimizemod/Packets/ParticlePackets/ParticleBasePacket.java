@@ -1,6 +1,7 @@
 package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
@@ -74,7 +75,7 @@ public class ParticleBasePacket {
 
     public static void processMessage(ParticleBasePacket packet) {
         // get the client world
-        var world = Minecraft.getInstance().level;
+        var world = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.level : null;
 
         if (world == null) return;
         for (int i = 0; i < packet.x.size(); i++) {

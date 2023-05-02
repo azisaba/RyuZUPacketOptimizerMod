@@ -1,4 +1,4 @@
-package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve;
+package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Force;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
