@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 import packetoptimizemod.packetoptimizemod.GUI.SettingScreen;
+import packetoptimizemod.packetoptimizemod.PacketOptimizeMod;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleBasePacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.ParticleVectorPacket;
 import packetoptimizemod.packetoptimizemod.Particles.ColorComposterParticle.ColorComposterParticleData;
@@ -126,24 +127,18 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
 
                 if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                     switch (packet.type) {
-                        case 0:
-                            world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
-                        case 1:
-                            world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
-                        case 2:
-                            world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
-                        case 3:
-                            world.addParticle(new ColorComposterParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
-                        case 4:
-                            world.addParticle(new ColorCritParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
-                        case 5:
-                            world.addParticle(new ColorFireworkParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                            break;
+                        case 0 ->
+                                world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                        case 1 ->
+                                world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                        case 2 ->
+                                world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                        case 3 ->
+                                world.addParticle(new ColorComposterParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                        case 4 ->
+                                world.addParticle(new ColorCritParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                        case 5 ->
+                                world.addParticle(new ColorFireworkParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
                     }
 
                 }
@@ -158,24 +153,18 @@ public class ParticleOriginalColorPacket extends ParticleVectorPacket {
 
                     if (SettingScreen.drawingRate == 100 || random.nextInt(100) < SettingScreen.drawingRate) {
                         switch (packet.type) {
-                            case 0:
-                                world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                                break;
-                            case 1:
-                                world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z,offx, offy, offz);
-                                break;
-                            case 2:
-                                world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                                break;
-                            case 3:
-                                world.addParticle(new ColorComposterParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                                break;
-                            case 4:
-                                world.addParticle(new ColorCritParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                                break;
-                            case 5:
-                                world.addParticle(new ColorFireworkParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
-                                break;
+                            case 0 ->
+                                    world.addParticle(new ColorFlashParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                            case 1 ->
+                                    world.addParticle(new ColorFlameParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                            case 2 ->
+                                    world.addParticle(new ColorEndRodParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                            case 3 ->
+                                    world.addParticle(new ColorComposterParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                            case 4 ->
+                                    world.addParticle(new ColorCritParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
+                            case 5 ->
+                                    world.addParticle(new ColorFireworkParticleData(packet.r, packet.g, packet.b, packet.scale), true, x, y, z, offx, offy, offz);
                         }
 
                     }

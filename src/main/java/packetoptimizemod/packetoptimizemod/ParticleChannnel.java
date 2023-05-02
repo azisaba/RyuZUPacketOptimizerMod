@@ -5,8 +5,8 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.*;
-import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve.ParticleForceColorPacket;
-import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve.ParticleForcePacket;
+import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Force.ParticleForceColorPacket;
+import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Force.ParticleForcePacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleBlockPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleFallingDustPacket;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Material.ParticleItemPacket;
@@ -14,11 +14,11 @@ import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Offset.*;
 import packetoptimizemod.packetoptimizemod.Packets.*;
 import packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Original.ParticleOriginalColorPacket;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 public class ParticleChannnel {
-    private static final String PROTOCOL_VERSION = "754";
+    // https://minecraft.fandom.com/ja/wiki/%E3%83%97%E3%83%AD%E3%83%88%E3%82%B3%E3%83%AB%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3
+    private static final String PROTOCOL_VERSION = "758";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(PacketOptimizeMod.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
@@ -27,6 +27,7 @@ public class ParticleChannnel {
     );
 
     public static void initialize() {
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         INSTANCE.registerMessage(SendUsingModPacket.ID , SendUsingModPacket.class , SendUsingModPacket::encode ,
                 SendUsingModPacket::decode , SendUsingModPacket::onMessageReceived ,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));

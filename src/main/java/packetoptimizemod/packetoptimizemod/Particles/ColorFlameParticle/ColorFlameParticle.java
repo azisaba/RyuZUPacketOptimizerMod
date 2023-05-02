@@ -4,7 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.util.Mth;
+import packetoptimizemod.packetoptimizemod.MathUtils;
 
 public class ColorFlameParticle extends RisingParticle {
 
@@ -44,7 +44,7 @@ public class ColorFlameParticle extends RisingParticle {
     @Override
     public int getLightColor(float partialTick) {
         float f = ((float)this.age + partialTick) / (float)this.lifetime;
-        f = Mth.clamp(f, 0.0F, 1.0F);
+        f = MathUtils.clamp(f, 0.0F, 1.0F);
         int i = super.getLightColor(partialTick);
         int j = i & 255;
         int k = i >> 16 & 255;

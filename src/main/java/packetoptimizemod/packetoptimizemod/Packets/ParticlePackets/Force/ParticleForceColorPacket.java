@@ -1,4 +1,4 @@
-package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Forve;
+package packetoptimizemod.packetoptimizemod.Packets.ParticlePackets.Force;
 
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;

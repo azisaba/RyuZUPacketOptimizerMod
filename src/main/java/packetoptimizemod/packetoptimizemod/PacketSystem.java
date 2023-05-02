@@ -2,9 +2,13 @@ package packetoptimizemod.packetoptimizemod;
 
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class PacketSystem {
     public enum Particle {
@@ -129,4 +133,18 @@ public class PacketSystem {
             return blocks.defaultBlockState();
         }
     }
+
+    public static final TreeMap<String, SimpleParticleType> PARTICLE_TYPES = new TreeMap<>(Comparator.naturalOrder()) {{
+        try {
+            for (Field field : ParticleTypes.class.getDeclaredFields()) {
+                if (SimpleParticleType.class.isAssignableFrom(field.getType())) {
+                    SimpleParticleType particleType = (SimpleParticleType) field.get(null);
+                    put(field.getName(), particleType);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }};
+    public static final List<SimpleParticleType> PARTICLE_TYPES_LIST = PARTICLE_TYPES.keySet().stream().sorted().map(PARTICLE_TYPES::get).toList();
 }

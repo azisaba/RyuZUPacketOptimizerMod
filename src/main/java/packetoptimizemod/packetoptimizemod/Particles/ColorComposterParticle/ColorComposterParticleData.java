@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.Mth;
+import packetoptimizemod.packetoptimizemod.MathUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -60,7 +60,7 @@ public class ColorComposterParticleData implements ParticleOptions {
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.alpha = Mth.clamp(alpha, 0.01F, 4.0F);
+        this.alpha = MathUtils.clamp(alpha, 0.01F, 4.0F);
     }
 
     @Override
